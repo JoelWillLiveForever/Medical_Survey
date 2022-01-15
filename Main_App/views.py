@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 # Create your views here.
 
 def hello(request):
 
+    if request.method == 'POST' and 'toSurveyBtn' in request.POST:
+        return redirect('registration')
     context= {
 
     }
