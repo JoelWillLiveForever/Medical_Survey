@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Приветствие
+{% endblock %}
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" type='text/css' href='{% static "css/hello.css" %}'>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="pageBlock">
+        <div class="mainText">
+            <p class="first">В ходе опроса о состоянии здоровья Вам зададут вопросы о Вашем здоровье и методах лечения, включая влияние на Вас чрезвычайной ситуации в области здравоохранения, связанной с COVID-19. 
+                Ваше участие является добровольным. Вы можете пропускать любые вопросы или прекратить прохождение опроса в любое время.</p>
+            <p class="second">Опрос займет 10-15 минут Вашего времени. </p>
+        </div>
+        <button class="toSurvey" name="toSurveyBtn">
+            Пройти опрос
+        </button>
+        <div class="subText">
+            <p class="first">Если вы уже прошли данный опрос и хотите посмотреть результаты, то войдите в личный кабинет с помощью своего ФИО и номера телефона, ранее указанные в опросе.</p>
+        </div>
+        <button class="toProfile" name="toProfileBtn">
+            Войти в личный кабинет
+        </button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Регистрация
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type='text/css' href='{% static "css/registration.css" %}'>
+
+<div class="container body-form">
+    <div class="row explanation">
+        <div class="col-md-12">
+            <div class="explanationtext1">
+                <p>Укажите информацию о себе</p>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="explanationtext2">
+                <p>Перед началом опроса, пожалуйста, заполните информацию о себе</p>
+            </div>
+        </div>
+    </div>
+    <div class="row fields">
+        <div class="form-group">
+            <p>
+                <label>Фамилия</label>
+                <input type="text" name="surname"></input>
+            </p>
+            <p>
+                <label>Имя</label>
+                <input type="text" name="name"></input>
+            </p>
+            <p>
+                <label>Отчество</label>
+                <input type="text" name="lastname"></input>
+            </p>
+            <p>
+                <label>Пол</label>
+                <div class="genderbutton">
+                    <button class="male">Мужской</button>
+                    <button class="female">Женский</button>
+                </div>
+            </p>
+            <p>
+                <label>Возраст</label>
+                <input type="text" name="age"></input>
+            </p>
+            <p>
+                <label>Страна</label>
+                <input type="text" name="country"></input>
+            </p>
+            <p>
+                <label>Город</label>
+                <input type="text" name="city"></input>
+            </p>
+            <p>
+                <label>Адрес электронной почты</label>
+                <input type="text" name="email"></input>
+            </p>
+            <p>
+                <label>Мобильный телефон</label>
+                <input type="text" name="phone"></input>
+            </p>
+        </div>
+    </div>
+    <div class="row navbutton">
+        <button class="back">Назад</button>
+        <button class="next">Далее</button>
+    </div>
+</div>
+{% endblock %}

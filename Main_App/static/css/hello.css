@@ -1,0 +1,50 @@
+.pageBlock {
+    align-items: center;
+    width: 100%;
+}
+.mainText {
+    width: 75%;
+    margin: auto;
+}
+.subText {
+    width: 75%;
+    margin: auto;
+    margin-top: 75px;
+}
+.first {
+    font-size: 36px;
+    text-align: center;
+}
+.second {
+    margin-top: 25px;
+    font-size: 36px;
+    text-align: center;
+}
+.pageBlock button {
+    width: 532px;
+    height: 90px;
+    border-radius: 10px;
+    font-size: 36px;
+    font-weight: bold;
+    border: none;
+    background: #C4C4C4;
+}
+.pageBlock button:hover {
+    background: #757575;
+}
+.pageBlock button:active {
+    background: #333333;
+    color: #C4C4C4;
+}
+.toSurvey {
+    margin-top: 20px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+.toProfile {
+    margin-top: 20px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
