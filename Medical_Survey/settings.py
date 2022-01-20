@@ -124,3 +124,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, "Main_App/static/Main_App")
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'Main_App.Patient'
