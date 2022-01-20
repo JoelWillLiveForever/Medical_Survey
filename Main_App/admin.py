@@ -1,5 +1,6 @@
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
+from . import models
 
 from django.forms import *
 
@@ -9,7 +10,6 @@ from .models import *
 import django.contrib.auth.models as mod
 
 # Register your models here.
-
 class Patient_Admin(UserAdmin):
     add_form = PatientCreationForm
     form = PatientChangeForm
