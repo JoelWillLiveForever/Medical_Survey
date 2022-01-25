@@ -22,46 +22,47 @@
         </div>
     </div>
     <div class="row fields">
+        {% csrf_token %}
         <div class="form-group">
-            <p>
-                <label>Фамилия</label>
-                <input type="text" name="surname"></input>
-            </p>
-            <p>
-                <label>Имя</label>
-                <input type="text" name="name"></input>
-            </p>
-            <p>
-                <label>Отчество</label>
-                <input type="text" name="lastname"></input>
-            </p>
-            <p>
-                <label>Пол</label>
-                <div class="genderbutton">
-                    <button class="male">Мужской</button>
-                    <button class="female">Женский</button>
-                </div>
-            </p>
-            <p>
-                <label>Возраст</label>
-                <input type="text" name="age"></input>
-            </p>
-            <p>
-                <label>Страна</label>
-                <input type="text" name="country"></input>
-            </p>
-            <p>
-                <label>Город</label>
-                <input type="text" name="city"></input>
-            </p>
-            <p>
-                <label>Адрес электронной почты</label>
-                <input type="text" name="email"></input>
-            </p>
-            <p>
-                <label>Мобильный телефон</label>
-                <input type="text" name="phone"></input>
-            </p>
+            <form method="post">
+                <p>
+                    <label> {{ regForm.surname.label }}</label>
+                    {{ regForm.surname }}
+                </p>
+                <p>
+                    <label>{{ regForm.name.label }}</label>
+                    {{ regForm.name }}
+                </p>
+                <p>
+                    <label>{{ regForm.lastname.label }}</label>
+                    {{ regForm.lastname }}
+                </p>
+                <p>
+                    <label>{{ regForm.gender.label }}</label>
+                    {{ regForm.gender }}
+                </p>
+                <p>
+                    <label>{{ regForm.birth_date.label }}</label>
+                    <input type="date" name="birth_date" required id="id_birth_date"></input>
+                    <!-- {{ regForm.birth_date }} -->
+                </p>
+                <p>
+                    <label>{{ regForm.email.label }}</label>
+                    {{ regForm.email }}
+                </p>
+                <p>
+                    <label>{{ regForm.phone.label }}</label>
+                    {{ regForm.phone }}
+                </p>
+                <p>
+                    <label>{{ regForm.password1.label }}</label>
+                    {{ regForm.password1 }}
+                </p>
+                <p>
+                    <label>{{ regForm.password2.label }}</label>
+                    {{ regForm.password2 }}
+                </p>
+            </form>
         </div>
     </div>
     <div class="row navbutton">

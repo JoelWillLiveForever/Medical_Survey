@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect, render
+from .forms import RegistrationForm
 
 # Create your views here.
 
@@ -15,7 +16,8 @@ def hello(request):
 
 def registration(request):
 
+    form = RegistrationForm()
     context= {
-
+        'regForm': form,
     }
     return render(request, 'registration.html', context)
