@@ -21,53 +21,54 @@
             </div>
         </div>
     </div>
+    <form method="post">
+    {% csrf_token %}
     <div class="row fields">
-        {% csrf_token %}
         <div class="form-group">
-            <form method="post">
-                <p>
-                    <label> {{ regForm.surname.label }}</label>
-                    {{ regForm.surname }}
-                </p>
-                <p>
-                    <label>{{ regForm.name.label }}</label>
-                    {{ regForm.name }}
-                </p>
-                <p>
-                    <label>{{ regForm.lastname.label }}</label>
-                    {{ regForm.lastname }}
-                </p>
-                <p>
-                    <label>{{ regForm.gender.label }}</label>
-                    {{ regForm.gender }}
-                </p>
-                <p>
-                    <label>{{ regForm.birth_date.label }}</label>
-                    <input type="date" name="birth_date" required id="id_birth_date"></input>
-                    <!-- {{ regForm.birth_date }} -->
-                </p>
-                <p>
-                    <label>{{ regForm.email.label }}</label>
-                    {{ regForm.email }}
-                </p>
-                <p>
-                    <label>{{ regForm.phone.label }}</label>
-                    {{ regForm.phone }}
-                </p>
-                <p>
-                    <label>{{ regForm.password1.label }}</label>
-                    {{ regForm.password1 }}
-                </p>
-                <p>
-                    <label>{{ regForm.password2.label }}</label>
-                    {{ regForm.password2 }}
-                </p>
-            </form>
+            <p>
+                <label> {{ regForm.surname.label }}</label>
+                {{ regForm.surname }}
+            </p>
+            <p>
+                <label>{{ regForm.name.label }}</label>
+                {{ regForm.name }}
+            </p>
+            <p>
+                <label>{{ regForm.lastname.label }}</label>
+                {{ regForm.lastname }}
+            </p>
+            <p>
+                <label>{{ regForm.gender.label }}</label>
+                {{ regForm.gender }}
+            </p>
+            <p>
+                <label>{{ regForm.birth_date.label }}</label>
+                <input type="date" name="birth_date" required id="id_birth_date"></input>
+                <!-- {{ regForm.birth_date }} -->
+            </p>
+            <p>
+                <label>{{ regForm.email.label }}</label>
+                {{ regForm.email }}
+            </p>
+            <p>
+                <label>{{ regForm.phone.label }}</label>
+                {{ regForm.phone }}
+            </p>
+            <p>
+                <label>{{ regForm.password1.label }}</label>
+                {{ regForm.password1 }}
+            </p>
+            <p>
+                <label>{{ regForm.password2.label }}</label>
+                {{ regForm.password2 }}
+            </p>
         </div>
     </div>
     <div class="row navbutton">
-        <button class="back" name='back_button'>Назад</button>
-        <button class="next" name='next_button'>Далее</button>
+        <button type="button" class="back" name='back_button' onClick="history.back()">Назад</button>
+        <button type="submit" class="next" name='next_button'>Далее</button>
+
     </div>
+    </form>
 </div>
 {% endblock %}
