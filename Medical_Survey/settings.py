@@ -126,7 +126,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "Main_App/static/Main_App")
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'sop.mailbot@gmail.com'
-EMAIL_HOST_PASSWORD = '(vo23022002va)'
+EMAIL_HOST_PASSWORD = '(hawok_0235)'
 EMAIL_PORT = 587
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
