@@ -38,6 +38,20 @@
                 {{ regForm.lastname }}
             </p>
             <p>
+                <label>{{ regForm.city.label }}</label>
+                {{ regForm.city }}
+            </p>
+            <p>
+                <label>{{ regForm.university.label }}</label>
+                {{ regForm.university }}
+                <p>{{ regForm.university.help_text }}</p>
+            </p>
+            <p>
+                <label>{{ regForm.faculty.label }}</label>
+                {{ regForm.faculty }}
+                <p>{{ regForm.faculty.help_text }}</p>
+            </p>
+            <p>
                 <label>{{ regForm.gender.label }}</label>
                 {{ regForm.gender }}
             </p>
@@ -53,21 +67,23 @@
             <p>
                 <label>{{ regForm.phone.label }}</label>
                 {{ regForm.phone }}
+                <p>{{ regForm.phone.help_text }}</p>
             </p>
             <p>
                 <label>{{ regForm.password1.label }}</label>
                 {{ regForm.password1 }}
+                <p>{{ regForm.password1.help_text }}</p>
             </p>
             <p>
                 <label>{{ regForm.password2.label }}</label>
                 {{ regForm.password2 }}
+                <p>{{ regForm.password2.help_text }}</p>
             </p>
         </div>
     </div>
     <div class="row navbutton">
-        <button type="button" class="back" name='back_button' onClick="history.back()">Назад</button>
-        <button type="submit" class="next" name='next_button'>Далее</button>
-
+        <button type="button" onclick="location.href = '/'" class="back" name='back_button'>Назад</button>
+        <button type="submit" class="next" name='next_button'>Зарегистрироваться</button>
     </div>
     </form>
 </div>

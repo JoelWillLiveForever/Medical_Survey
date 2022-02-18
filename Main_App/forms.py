@@ -17,20 +17,58 @@ class PatientCreationForm(UserCreationForm):
 
     class Meta:
         model = Patient
-        fields = ('email', 'phone', 'surname', 'name', 'lastname', 'gender', 'birth_date', 'age', 'password')
+        fields = ('email', 'phone', 'surname', 'name', 'lastname', 'city', 'university', 'faculty', 'gender', 'birth_date', 'age', 'password')
 
 
 class PatientChangeForm(UserChangeForm):
 
     class Meta:
         model = Patient
-        fields = ('email', 'phone', 'surname', 'name', 'lastname', 'gender', 'birth_date', 'age', 'password')
+        fields = ('email', 'phone', 'surname', 'name', 'lastname', 'city', 'university', 'faculty', 'gender', 'birth_date', 'age', 'password')
 
+class LoginForm(forms.Form):
+    email = forms.EmailField(required=True, label='Email', max_length=320)
+    password = forms.CharField(required=True, label='Пароль', max_length=320, widget=forms.PasswordInput)
+
+    error_messages = {
+        'not_user': 'Неправильный Email или пароль!',
+        'error': 'Форма не валидна!',
+    }
+
+    class Meta:
+        model = get_user_model()
+        fields = (
+            'email',
+            'password',
+       )
+
+    # def clean(self):
+    #     email = self.cleaned_data.get('email')
+    #     password = self.cleaned_data.get('password')
+    #     user = authenticate(email=email, password=password)
+
+    #     if not user or not user.is_active:
+    #         raise forms.ValidationError(
+    #             self.error_messages['not_user'],
+    #             code='not_user',
+    #         )
+    #     return self.cleaned_data
+
+    # def login(self, request):
+    #     email = self.cleaned_data.get('email')
+    #     password = self.cleaned_data.get('password')
+    #     user = authenticate(email=email, password=password)
+    #     return user
+        
 class RegistrationForm(UserCreationForm):
 
     surname = forms.CharField(required=True, label='* Фамилия', max_length=320, help_text='Не более 320 символов')
     name = forms.CharField(required=True, label='* Имя', max_length=320, help_text='Не более 320 символов')
     lastname = forms.CharField(required=False, label='* Отчество', max_length=320, help_text='Не более 320 символов')
+
+    city = forms.CharField(required=False, label='* Город', max_length=320, help_text='Не более 320 символов')
+    university = forms.CharField(required=False, label='* Университет', max_length=320, help_text='Используя сокращение прим. "ВГТУ"')
+    faculty = forms.CharField(required=False, label='* Факультет', max_length=320, help_text='Используя сокращение прим. "ФИТКБ"')
 
     gender = forms.ChoiceField(required=True, label='* Пол', choices=[(1,'Мужской'), (2, 'Женский')], initial=1)
 
@@ -69,6 +107,9 @@ class RegistrationForm(UserCreationForm):
             'surname',
             'name',
             'lastname',
+            'city',
+            'university',
+            'faculty',
             'gender',
             'birth_date',
             'email',
@@ -110,6 +151,9 @@ class RegistrationForm(UserCreationForm):
         user.name = self.cleaned_data['name']
         user.lastname = self.cleaned_data['lastname']
 
+        user.city = self.cleaned_data['city']
+        user.university = self.cleaned_data['university']
+        user.faculty = self.cleaned_data['faculty']
         user.gender = self.cleaned_data['gender']
         user.birth_date = self.cleaned_data['birth_date']
 

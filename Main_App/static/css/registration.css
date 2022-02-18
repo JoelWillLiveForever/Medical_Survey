@@ -6,12 +6,6 @@ body {
     min-height: 130vh;
 }
 
-.namepage{
-    display: flex;
-    justify-content: center;
-    font-size: 30px;
-}
-
 p{
     margin-bottom: 0px;
 }

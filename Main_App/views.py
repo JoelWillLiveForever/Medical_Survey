@@ -12,8 +12,8 @@ from django.core.mail import EmailMessage
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout
 
-from .forms import RegistrationForm
 from .models import *
+from .forms import *
 
 # Create your views here.
 
@@ -21,6 +21,8 @@ def hello(request):
 
     if request.method == 'POST' and 'toSurveyBtn' in request.POST:
         return redirect('registration')
+    if request.method == 'POST' and 'toProfileBtn' in request.POST:
+        return redirect('login_page')
     context= {
 
     }
@@ -65,7 +67,7 @@ def acc_active_sent(request):
 
 def acc_active_confirmed(request):
     if request.method == 'POST' and 'back_button' in request.POST:
-        return redirect('questionA')
+        return redirect('login_page')
     return render(request, 'acc_active_confirmed.html')
 
 def activate(request, uidb64, token):
@@ -84,6 +86,35 @@ def activate(request, uidb64, token):
     else:
         return HttpResponse('Activation link is invalid!')
 
+def login_page(request):
+    if request.user.is_authenticated:
+        return redirect('profile')
+
+    # error = ''
+    # if request.method == 'POST' and request.method == 'GET' and 'back_button' in request.GET:
+    #     return redirect('home')
+    if request.method == 'POST' and 'login_button' in request.POST:
+        login_form = LoginForm(request.POST)
+
+        if login_form.is_valid():
+            email = login_form.cleaned_data.get('email')
+            password = login_form.cleaned_data.get('password')
+
+            user = authenticate(request, email=email, password=password)
+            if user:
+                login(request, user)
+                return redirect('profile')
+
+    form = LoginForm()
+    context = {'login_form': form}
+
+    return render(request, 'login_page.html', context)
+
+def profile(request):
+    if request.method == 'POST' and 'button_logout' in request.POST:
+        logout(request)
+        return redirect('login_page')
+    return render(request, 'profile.html')
 
 def questionA(request):
     context= {

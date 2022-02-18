@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Вход в личный кабинет
+{% endblock %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type='text/css' href='{% static "css/login.css" %}'>
+
+<div class="container body-form">
+    <div class="row explanation">
+        <div class="col-md-12">
+            <div class="text">
+                <p>Вход в личный кабинет</p>
+            </div>
+        </div>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row loginfields">
+            <div class="form-group">
+                {{ login_form.as_p }}
+            </div>
+        </div>
+        <div class="row Enter_button">
+            <button type="button" onclick="location.href = '/'" class="back" name='back_button'>Назад</button>
+            <button type="submit" class="enter" name="login_button"> Войти </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
