@@ -1,0 +1,70 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 130vh;
+}
+
+.text{
+    display: flex;
+    justify-content: center;
+    font-size: 48px;
+    margin-top: 4%;
+}
+
+.loginfields{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+} 
+
+.form-group{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 648px;
+}
+
+.form-group label {
+    margin: 3px 0;
+    display: block;
+    font-size: 24px;
+}
+
+.form-group input {
+    width: 100%;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 10px;
+    border: none;
+    background: #C4C4C4;
+}
+
+.Enter_button{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.Enter_button button{
+    width: 400px;
+    height: 70px;
+    font-size: 24px;
+    border-radius: 10px;
+    border: none;
+    background: #C4C4C4;
+}
+
+.Enter_button button:hover{
+    background: #757575;
+}
+
+.Enter_button button:active{
+    background: #333333;
+    color: #C4C4C4;
+}
+
+.enter{
+    margin-left: 50px;
+}

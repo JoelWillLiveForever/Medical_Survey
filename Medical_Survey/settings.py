@@ -123,6 +123,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "Main_App/static/Main_App")
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'sop.mailbot@gmail.com'
+EMAIL_HOST_PASSWORD = '(hawok_0235)'
+EMAIL_PORT = 587
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#LOGIN_REDIRECT_URL = 'home' # Когда личный кабинет будем делать поменяем
 
 AUTH_USER_MODEL = 'Main_App.Patient'

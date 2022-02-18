@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type='text/css' href='{% static "css/activation_email.css" %}'>
+
+<div class="container">
+    <div class="row confirmed">
+        <div class="col-md-12">
+            <div class="centerContent">
+                {% csrf_token %}
+                  <h4>Ваша почта подтверждена!</h4>
+                  <p> Войдите в систему, используя свою почту и пароль.</p>
+              </div>
+        </div>
+    </div>
+    <div class="row button">
+        <div class="col-md-6 button_back_confirmed">
+            
+                <form method="post">
+                    {% csrf_token %}
+                    <button class="back_button" name="back_button"><p>Войти в личный кабинет</p></button>
+                </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -21,52 +21,70 @@
             </div>
         </div>
     </div>
+    <form method="post">
+    {% csrf_token %}
     <div class="row fields">
         <div class="form-group">
             <p>
-                <label>Фамилия</label>
-                <input type="text" name="surname"></input>
+                <label> {{ regForm.surname.label }}</label>
+                {{ regForm.surname }}
             </p>
             <p>
-                <label>Имя</label>
-                <input type="text" name="name"></input>
+                <label>{{ regForm.name.label }}</label>
+                {{ regForm.name }}
             </p>
             <p>
-                <label>Отчество</label>
-                <input type="text" name="lastname"></input>
+                <label>{{ regForm.lastname.label }}</label>
+                {{ regForm.lastname }}
             </p>
             <p>
-                <label>Пол</label>
-                <div class="genderbutton">
-                    <button class="male">Мужской</button>
-                    <button class="female">Женский</button>
-                </div>
+                <label>{{ regForm.city.label }}</label>
+                {{ regForm.city }}
             </p>
             <p>
-                <label>Возраст</label>
-                <input type="text" name="age"></input>
+                <label>{{ regForm.university.label }}</label>
+                {{ regForm.university }}
+                <p>{{ regForm.university.help_text }}</p>
             </p>
             <p>
-                <label>Страна</label>
-                <input type="text" name="country"></input>
+                <label>{{ regForm.faculty.label }}</label>
+                {{ regForm.faculty }}
+                <p>{{ regForm.faculty.help_text }}</p>
             </p>
             <p>
-                <label>Город</label>
-                <input type="text" name="city"></input>
+                <label>{{ regForm.gender.label }}</label>
+                {{ regForm.gender }}
             </p>
             <p>
-                <label>Адрес электронной почты</label>
-                <input type="text" name="email"></input>
+                <label>{{ regForm.birth_date.label }}</label>
+                <input type="date" name="birth_date" required id="id_birth_date"></input>
+                <!-- {{ regForm.birth_date }} -->
             </p>
             <p>
-                <label>Мобильный телефон</label>
-                <input type="text" name="phone"></input>
+                <label>{{ regForm.email.label }}</label>
+                {{ regForm.email }}
+            </p>
+            <p>
+                <label>{{ regForm.phone.label }}</label>
+                {{ regForm.phone }}
+                <p>{{ regForm.phone.help_text }}</p>
+            </p>
+            <p>
+                <label>{{ regForm.password1.label }}</label>
+                {{ regForm.password1 }}
+                <p>{{ regForm.password1.help_text }}</p>
+            </p>
+            <p>
+                <label>{{ regForm.password2.label }}</label>
+                {{ regForm.password2 }}
+                <p>{{ regForm.password2.help_text }}</p>
             </p>
         </div>
     </div>
     <div class="row navbutton">
-        <button class="back">Назад</button>
-        <button class="next">Далее</button>
+        <button type="button" onclick="location.href = '/'" class="back" name='back_button'>Назад</button>
+        <button type="submit" class="next" name='next_button'>Зарегистрироваться</button>
     </div>
+    </form>
 </div>
 {% endblock %}
