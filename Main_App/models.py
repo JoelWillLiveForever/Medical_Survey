@@ -13,15 +13,23 @@ from django.utils import timezone
 class Patient(AbstractBaseUser, PermissionsMixin):
     # required reg and auth field
     email = models.EmailField(('Email'), unique=True)
-    phone = models.CharField(('Phone'), max_length=16, unique=True)
 
     # personal info
     surname = models.CharField(('Фамилия'), default="Christ", max_length=320)
     name = models.CharField(('Имя'), default="Jesus", max_length=320)
     lastname = models.CharField(('Отчество'), blank=True, null=True, default=None, max_length=320)
+    phone = models.CharField(('Phone'), blank=True, null=True, max_length=16)
 
+    # affiliation info
+    city = models.CharField(('Город'), blank=True, null=True, default = 'Voronezh', max_length=320)
+    university = models.CharField(('Учебное заведение'), blank=True, null=True, default= 'ВГТУ', max_length=320)
+    faculty = models.CharField(('Факультет'), blank=True, null=True, default='', max_length=320)
+
+    # physical info
     gender = models.CharField(('Пол'), blank=True, null=True, default='', max_length=50)
     birth_date = models.DateTimeField(('Дата рождения'), blank=True, null=True, default='2000-01-01 00:00:00')
+
+    # это поле не трогать, господь будет рад :)
     age = models.IntegerField(('Возраст'), blank=True, null=True, default=1)
 
     # permissions
