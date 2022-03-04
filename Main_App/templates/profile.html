@@ -11,46 +11,62 @@
 <div class="container body-form">
     <div class="row tabs">
         <div class="nav">
-            <button class="nav-item to_profile">Личный кабинет</button>
-            <button class="nav-item to_questions">Опрос</button>
-            <button class="nav-item to_rec">Рекомендации</button>
+            <button tag="tablinks" class="nav-item to_profile" name="to_profile" onclick="openTab(event, 'Profile')">Личный кабинет</button>
+            <button tag="tablinks" class="nav-item to_questions" name="to_questions" onclick="openTab(event, 'Survey')">Опрос</button>
+            <button tag="tablinks" class="nav-item to_rec" name="to_rec" onclick="openTab(event, 'Recommend')">Рекомендации</button>
         </div>
     </div>
-    <div class="row geninfo">
-        <div class="geninfo_block">
-            <div class="row part1">
-                <div class="col-md-6">
-                    <p>Иванов Иван Иванович</p>
-                    <p>Электронная почта:</p>
+    <!-- vvv Вкладка личного кабинета vvv -->
+    <div id="Profile" class="tabcontent"> 
+        <div class="row geninfo">
+            <div class="geninfo_block">
+                <div class="row part1">
+                    <div class="col-md-6">
+                        <p>{{ user.get_full_name }}</p>
+                        <!-- vvv поширше в правый бок сделай vvv -->
+                        <p>Электронная почта: {{ user.email }}</p> 
+                    </div>
+                </div>
+                <div class="row part2">
+                    <!-- vvv через класс формы heightNweight vvv -->
+                    <div class="col-md-3">
+                        <p>Рост:</p>
+                        <p>Вес:</p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>Учебное заведение: {{ user.university }}</p>
+                        <!-- vvv поширше в правый бок сделай vvv -->
+                        <p>Факультет: {{ user.faculty }}</p>
+                    </div>
                 </div>
             </div>
-            <div class="row part2">
-                <div class="col-md-3">
-                    <p>Рост:</p>
-                    <p>Вес:</p>
-                </div>
-                <div class="col-md-5">
-                    <p>Учебное заведение:</p>
-                    <p>Факультет:</p>
+        </div>
+        <div class="row analysis">
+            <div class="analysis_block">
+                <p>Анализы</p>
+                <div class="row analys1">
+                    <div class="col-md-10 analysis_info">
+                        <p>ОАК</p>
+                    </div>
+                    <div class="col-md-10 analysis_info">
+                        <p>ТГ</p>
+                    </div>
+                    <div class="col-md-10 analysis_info">
+                        <p>Глюкоза</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row analysis">
-        <div class="analysis_block">
-            <p>Анализы</p>
-            <div class="row analys1">
-                <div class="col-md-10 analysis_info">
-                    <p>ОАК</p>
-                </div>
-                <div class="col-md-10 analysis_info">
-                    <p>ТГ</p>
-                </div>
-                <div class="col-md-10 analysis_info">
-                    <p>Глюкоза</p>
-                </div>
-            </div>
-        </div>
+
+    <!-- vvv Вкладка опроса vvv -->
+    <div id="Survey" class="tabcontent" style="display: none;"> 
+        Опрос
+    </div>
+
+    <!-- vvv Вкладка рекомендаций vvv -->
+    <div id="Recommend" class="tabcontent" style="display: none;"> 
+        Рекомендации
     </div>
 </div>
 

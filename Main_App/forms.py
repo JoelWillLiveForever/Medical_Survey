@@ -42,24 +42,16 @@ class LoginForm(forms.Form):
             'password',
        )
 
-    # def clean(self):
-    #     email = self.cleaned_data.get('email')
-    #     password = self.cleaned_data.get('password')
-    #     user = authenticate(email=email, password=password)
+class HeightNWeight(UserChangeForm):
+    # Форма для изменения параметров роста и веса пациента 
+    # class Meta: 
+    #     model = Patient # для начала добавить поля в модель пациента
+    # #     fields = (
+    # #         'height',
+    # #         'weight',
+    # #    )
+    pass
 
-    #     if not user or not user.is_active:
-    #         raise forms.ValidationError(
-    #             self.error_messages['not_user'],
-    #             code='not_user',
-    #         )
-    #     return self.cleaned_data
-
-    # def login(self, request):
-    #     email = self.cleaned_data.get('email')
-    #     password = self.cleaned_data.get('password')
-    #     user = authenticate(email=email, password=password)
-    #     return user
-        
 class RegistrationForm(UserCreationForm):
 
     surname = forms.CharField(required=True, label='* Фамилия', max_length=320, help_text='Не более 320 символов')
