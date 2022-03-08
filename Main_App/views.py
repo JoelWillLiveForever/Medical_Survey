@@ -115,7 +115,6 @@ def profile(request):
         logout(request)
         return redirect('login_page')
     if request.method == 'POST' and ('height' or 'weight') in request.POST:
-        print(request.POST)
         form = HeightNWeightForm(request.POST)
         if form.is_valid(): # Изменение значений роста и веса
             Patient.objects.filter(id=request.user.id).update(height=request.POST.get('height'), weight=request.POST.get('weight'))
@@ -139,7 +138,7 @@ def profile(request):
         formHW = HeightNWeightForm(data)
     else:
         data = {'height': 0.0, 'weight': 0.0}
-        formHW = HeightNWeightForm(weight=0.0, height=0.0)
+        formHW = HeightNWeightForm(data)
 
     #formHW = HeightNWeightForm()
     context = {'formHW': formHW}
