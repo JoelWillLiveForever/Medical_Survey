@@ -30,8 +30,14 @@
                 <div class="row part2">
                     <!-- vvv через класс формы heightNweight vvv -->
                     <div class="col-md-3">
-                        <p>Рост:</p>
-                        <p>Вес:</p>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="formHW">
+                                <p>{{ formHW.height.label }} {{ formHW.height }}</p>
+                                <p>{{ formHW.weight.label }} {{ formHW.weight }}</p>
+                                <button hidden type="submit" class="submitHW" name='formHW_submit'>✓</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="col-md-5">
                         <p>Учебное заведение: {{ user.university }}</p>

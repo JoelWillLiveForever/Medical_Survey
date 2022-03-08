@@ -23,7 +23,7 @@ class Patient_Admin(UserAdmin):
 
     # просмотр и изменение полей
     fieldsets = (
-        (None, {'fields': ('email', 'phone', 'surname', 'name', 'lastname', 'age', 'birth_date', 'city', 'university', 'faculty', 'password', 'date_joined', 'date_registration', )}),
+        (None, {'fields': ('email', 'phone', 'surname', 'name', 'lastname', 'age', 'birth_date', 'height', 'weight', 'city', 'university', 'faculty', 'password', 'date_joined', 'date_registration', )}),
         ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', )}),
     )
 
@@ -31,7 +31,7 @@ class Patient_Admin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide', ),
-            'fields': ('email', 'phone','surname', 'name', 'lastname', 'gender', 'birth_date', 'password1', 'password2', 'is_staff', 'is_active', 'is_superuser', )}
+            'fields': ('email', 'phone','surname', 'name', 'lastname', 'gender', 'birth_date', 'height', 'weight', 'password1', 'password2', 'is_staff', 'is_active', 'is_superuser', )}
         ),
     )
 

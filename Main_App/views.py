@@ -114,7 +114,37 @@ def profile(request):
     if request.method == 'POST' and 'button_logout' in request.POST:
         logout(request)
         return redirect('login_page')
-    return render(request, 'profile.html')
+    if request.method == 'POST' and ('height' or 'weight') in request.POST:
+        print(request.POST)
+        form = HeightNWeightForm(request.POST)
+        if form.is_valid(): # Изменение значений роста и веса
+            Patient.objects.filter(id=request.user.id).update(height=request.POST.get('height'), weight=request.POST.get('weight'))
+    
+    # Создание пациентов для вывода их текущих значений
+    patient_height = Patient.objects.filter(id=request.user.id).get().height
+    patient_weight = Patient.objects.filter(id=request.user.id).get().weight
+    # print(patient_height)
+    # print(patient_weight)
+
+    # Проверка значений пациентов
+    if (patient_height != 0.0 ):
+        if (patient_weight != 0.0):
+            data = {'height': patient_height, 'weight': patient_weight}
+            formHW = HeightNWeightForm(data)
+        else:
+            data = {'height': patient_height, 'weight': 0.0}
+            formHW = HeightNWeightForm(data)
+    elif (patient_weight != 0):
+        data = {'height': 0.0, 'weight': patient_weight}
+        formHW = HeightNWeightForm(data)
+    else:
+        data = {'height': 0.0, 'weight': 0.0}
+        formHW = HeightNWeightForm(weight=0.0, height=0.0)
+
+    #formHW = HeightNWeightForm()
+    context = {'formHW': formHW}
+
+    return render(request, 'profile.html', context)
 
 def questionA(request):
     context= {

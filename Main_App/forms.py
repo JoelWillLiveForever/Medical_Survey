@@ -1,3 +1,4 @@
+from email.policy import default
 from pyexpat import model
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
@@ -17,14 +18,14 @@ class PatientCreationForm(UserCreationForm):
 
     class Meta:
         model = Patient
-        fields = ('email', 'phone', 'surname', 'name', 'lastname', 'city', 'university', 'faculty', 'gender', 'birth_date', 'age', 'password')
+        fields = ('email', 'phone', 'surname', 'name', 'lastname', 'city', 'university', 'faculty', 'gender', 'birth_date', 'height', 'weight', 'age', 'password')
 
 
 class PatientChangeForm(UserChangeForm):
 
     class Meta:
         model = Patient
-        fields = ('email', 'phone', 'surname', 'name', 'lastname', 'city', 'university', 'faculty', 'gender', 'birth_date', 'age', 'password')
+        fields = ('email', 'phone', 'surname', 'name', 'lastname', 'city', 'university', 'faculty', 'gender', 'birth_date', 'height', 'weight', 'age', 'password')
 
 class LoginForm(forms.Form):
     email = forms.EmailField(required=True, label='Email', max_length=320)
@@ -42,15 +43,21 @@ class LoginForm(forms.Form):
             'password',
        )
 
-class HeightNWeight(UserChangeForm):
-    # Форма для изменения параметров роста и веса пациента 
-    # class Meta: 
-    #     model = Patient # для начала добавить поля в модель пациента
-    # #     fields = (
-    # #         'height',
-    # #         'weight',
-    # #    )
-    pass
+class HeightNWeightForm(UserChangeForm):
+    # Форма для изменения параметров роста и веса пациента
+    # def __init__(self, height, weight):
+    #     self.height=forms.FloatField(required=False, label='Рост:', initial=height) # instance attribute
+    #     self.weight=forms.FloatField(required=False, label='Вес:', initial=weight)
+
+    height = forms.FloatField(required=False, label='Рост:', initial=0.0)
+    weight = forms.FloatField(required=False, label='Вес:', initial=0.0)
+
+    class Meta: 
+        model = Patient # для начала добавить поля в модель пациента
+        fields = (
+            'height',
+            'weight',
+       )
 
 class RegistrationForm(UserCreationForm):
 

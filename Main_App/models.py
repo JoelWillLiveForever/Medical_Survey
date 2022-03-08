@@ -18,16 +18,18 @@ class Patient(AbstractBaseUser, PermissionsMixin):
     surname = models.CharField(('Фамилия'), default="Christ", max_length=320)
     name = models.CharField(('Имя'), default="Jesus", max_length=320)
     lastname = models.CharField(('Отчество'), blank=True, null=True, default=None, max_length=320)
-    phone = models.CharField(('Phone'), blank=True, null=True, max_length=16)
+    phone = models.CharField(('Телефон'), blank=True, null=True, max_length=16)
 
     # affiliation info
-    city = models.CharField(('Город'), blank=True, null=True, default = 'Voronezh', max_length=320)
+    city = models.CharField(('Город'), blank=True, null=True, default = 'Воронеж', max_length=320)
     university = models.CharField(('Учебное заведение'), blank=True, null=True, default= 'ВГТУ', max_length=320)
     faculty = models.CharField(('Факультет'), blank=True, null=True, default='', max_length=320)
 
     # physical info
     gender = models.CharField(('Пол'), blank=True, null=True, default='', max_length=50)
     birth_date = models.DateTimeField(('Дата рождения'), blank=True, null=True, default='2000-01-01 00:00:00')
+    height = models.FloatField(('Рост'), blank=True, null=True, default=0)
+    weight = models.FloatField(('Вес'), blank=True, null=True, default=0)
 
     # это поле не трогать, господь будет рад :)
     age = models.IntegerField(('Возраст'), blank=True, null=True, default=1)
