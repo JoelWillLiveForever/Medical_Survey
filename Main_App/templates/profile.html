@@ -21,7 +21,7 @@
         <div class="row geninfo">
             <div class="geninfo_block">
                 <div class="row part1">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <p>{{ user.get_full_name }}</p>
                         <!-- vvv поширше в правый бок сделай vvv -->
                         <p>Электронная почта: {{ user.email }}</p> 
@@ -29,17 +29,17 @@
                 </div>
                 <div class="row part2">
                     <!-- vvv через класс формы heightNweight vvv -->
-                    <div class="col-md-3">
+                    <div class="col-md-5">
                         <form method="post">
                             {% csrf_token %}
                             <div class="formHW">
-                                <p>{{ formHW.height.label }} {{ formHW.height }}</p>
-                                <p>{{ formHW.weight.label }} {{ formHW.weight }}</p>
+                                <p>{{ formHW.height.label }} {{ formHW.height }} см</p> 
+                                <p>{{ formHW.weight.label }} {{ formHW.weight }} кг</p>
                                 <button hidden type="submit" class="submitHW" name='formHW_submit'>✓</button>
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-7">
                         <p>Учебное заведение: {{ user.university }}</p>
                         <!-- vvv поширше в правый бок сделай vvv -->
                         <p>Факультет: {{ user.faculty }}</p>
