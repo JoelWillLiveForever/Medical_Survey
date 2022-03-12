@@ -128,11 +128,19 @@ def profile(request):
     # Проверка значений пациентов
     if (patient_height != 0.0 ):
         if (patient_weight != 0.0):
-            data = {'height': patient_height, 'weight': patient_weight}
-            formHW = HeightNWeightForm(data)
+            if (patient_height <= 10.0): # Данные в метрах (вряд-ли конечно есть человек ростом в 10 метров)
+                data = {'height': patient_height * 100, 'weight': patient_weight}
+                formHW = HeightNWeightForm(data)
+            else: # Данные в сантиметрах
+                data = {'height': patient_height, 'weight': patient_weight}
+                formHW = HeightNWeightForm(data)
         else:
-            data = {'height': patient_height, 'weight': 0.0}
-            formHW = HeightNWeightForm(data)
+            if (patient_height <= 10.0): # Данные в метрах
+                data = {'height': patient_height * 100, 'weight': 0.0}
+                formHW = HeightNWeightForm(data)
+            else: # Данные в сантиметрах
+                data = {'height': patient_height, 'weight': 0.0}
+                formHW = HeightNWeightForm(data)
     elif (patient_weight != 0):
         data = {'height': 0.0, 'weight': patient_weight}
         formHW = HeightNWeightForm(data)
