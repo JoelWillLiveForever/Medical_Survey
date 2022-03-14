@@ -68,3 +68,7 @@ body {
 .enter{
     margin-left: 50px;
 }
+
+.errorlist.nonfield {
+    display: none;
+}

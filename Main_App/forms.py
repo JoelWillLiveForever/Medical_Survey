@@ -8,6 +8,8 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from typing import Iterable
+import time
+from datetime import datetime
 
 # from django.core.validators import validate_email
 # from django.contrib.auth.password_validation import validate_password
@@ -42,6 +44,24 @@ class LoginForm(forms.Form):
             'email',
             'password',
        )
+       
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+        user = authenticate(email=email, password=password)
+
+        if not user or not user.is_active:
+            raise forms.ValidationError(
+                self.error_messages['not_user'],
+                code='not_user',
+            )
+        return self.cleaned_data
+
+    def login(self, request):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+        user = authenticate(email=email, password=password)
+        return user
 
 class HeightNWeightForm(UserChangeForm):
     # Форма для изменения параметров роста и веса пациента
@@ -92,7 +112,9 @@ class RegistrationForm(UserCreationForm):
         'email_exists': 'Пользователь с таким Email уже существует!',
         # 'email_not_valid': 'Некорректный Email-адрес!',
         # 'password_not_valid': 'Некорректный пароль!',
+        'phone_exists': 'Пользователь с указанным номером телефона уже существует!',
         'password_mismatch': 'Пароли не совпадают!',
+        'birthdate_isNotYet': 'Дата рождения указывает на то, что вы ещё не родились! Укажите прошедшую дату, если вы не из будущего.',
         'error': 'Форма не валидна!',
     }
 
@@ -133,7 +155,17 @@ class RegistrationForm(UserCreationForm):
                 code='email_exists',
             )
         return email
-    
+    def clean_birthdate(self): # Вывод кода ошибки о некорректной дате
+        print('Birth_date')
+        print(self.cleaned_data.get('birth_date'))
+        print(datetime.now())
+        if self.cleaned_data.get('birth_date') > datetime.now():
+            raise forms.ValidationError(
+                self.error_messages['birthdate_isNotYet'],
+                code='birthdate_isNotYet',
+            )
+        return self.data['birth_date']
+
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
         if get_user_model().objects.filter(phone=phone).exists():

@@ -34,6 +34,8 @@ def registration(request):
     #     # return redirect('.html')
     if request.method == 'POST' and 'next_button':    
         form = RegistrationForm(request.POST)
+        for field in form:
+            pass
         if form.is_valid():
             user = form.save()
             current_site = get_current_site(request)
@@ -93,20 +95,16 @@ def login_page(request):
     # error = ''
     # if request.method == 'POST' and request.method == 'GET' and 'back_button' in request.GET:
     #     return redirect('home')
+    context = {'login_form': LoginForm()}
     if request.method == 'POST' and 'login_button' in request.POST:
         login_form = LoginForm(request.POST)
-
         if login_form.is_valid():
-            email = login_form.cleaned_data.get('email')
-            password = login_form.cleaned_data.get('password')
-
-            user = authenticate(request, email=email, password=password)
+            user = login_form.login(request)
             if user:
                 login(request, user)
                 return redirect('profile')
 
-    form = LoginForm()
-    context = {'login_form': form}
+        context = {'login_form': login_form}
 
     return render(request, 'login_page.html', context)
 

@@ -118,3 +118,6 @@ p{
 .next{
     margin-left: 50px;
 }
+.alert.alert-danger {
+    margin-top: 10px;
+}

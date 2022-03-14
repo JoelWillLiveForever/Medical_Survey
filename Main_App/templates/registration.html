@@ -25,60 +25,106 @@
     {% csrf_token %}
     <div class="row fields">
         <div class="form-group">
-            <p>
-                <label> {{ regForm.surname.label }}</label>
-                {{ regForm.surname }}
-            </p>
-            <p>
-                <label>{{ regForm.name.label }}</label>
-                {{ regForm.name }}
-            </p>
-            <p>
-                <label>{{ regForm.lastname.label }}</label>
-                {{ regForm.lastname }}
-            </p>
-            <p>
-                <label>{{ regForm.city.label }}</label>
-                {{ regForm.city }}
-            </p>
-            <p>
-                <label>{{ regForm.university.label }}</label>
-                {{ regForm.university }}
-                <p>{{ regForm.university.help_text }}</p>
-            </p>
-            <p>
-                <label>{{ regForm.faculty.label }}</label>
-                {{ regForm.faculty }}
-                <p>{{ regForm.faculty.help_text }}</p>
-            </p>
-            <p>
-                <label>{{ regForm.gender.label }}</label>
-                {{ regForm.gender }}
-            </p>
-            <p>
-                <label>{{ regForm.birth_date.label }}</label>
-                <input type="date" name="birth_date" required id="id_birth_date"></input>
-                <!-- {{ regForm.birth_date }} -->
-            </p>
-            <p>
-                <label>{{ regForm.email.label }}</label>
-                {{ regForm.email }}
-            </p>
-            <p>
-                <label>{{ regForm.phone.label }}</label>
-                {{ regForm.phone }}
-                <p>{{ regForm.phone.help_text }}</p>
-            </p>
-            <p>
-                <label>{{ regForm.password1.label }}</label>
-                {{ regForm.password1 }}
-                <p>{{ regForm.password1.help_text }}</p>
-            </p>
-            <p>
-                <label>{{ regForm.password2.label }}</label>
-                {{ regForm.password2 }}
-                <p>{{ regForm.password2.help_text }}</p>
-            </p>
+            <div>
+                <p>
+                    <label> {{ regForm.surname.label }}</label>
+                    {{ regForm.surname }}
+                </p>
+                <p>
+                    <label>{{ regForm.name.label }}</label>
+                    {{ regForm.name }}
+                </p>
+                <p>
+                    <label>{{ regForm.lastname.label }}</label>
+                    {{ regForm.lastname }}
+                </p>
+                <p>
+                    <label>{{ regForm.city.label }}</label>
+                    {{ regForm.city }}
+                </p>
+                <p>
+                    <label>{{ regForm.university.label }}</label>
+                    {{ regForm.university }}
+                    <p>{{ regForm.university.help_text }}</p>
+                </p>
+                <p>
+                    <label>{{ regForm.faculty.label }}</label>
+                    {{ regForm.faculty }}
+                    <p>{{ regForm.faculty.help_text }}</p>
+                </p>
+                <p>
+                    <label>{{ regForm.gender.label }}</label>
+                    {{ regForm.gender }}
+                </p>
+                <p>
+                    <!-- vvv Сделать вывод ошибки о невозможности даты рождения младше сегодняшней vvv -->
+                    <label>{{ regForm.birth_date.label }}</label>
+                    <input type="date" name="birth_date" required id="id_birth_date"></input>
+                    <!-- {% if regForm.errors %}
+                        {% if regForm.birth_date.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ regForm.error_messages.birthdate_isNotYet|escape }}</strong>
+                            </div>
+                        {% endif %}
+                    {% endif %} -->
+                </p>
+                <p>
+                    <label>{{ regForm.email.label }}</label>
+                    {{ regForm.email }}
+                    {% if regForm.errors %}
+                        {% if regForm.email.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ regForm.error_messages.email_exists|escape }}</strong>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </p>
+                <p>
+                    <label>{{ regForm.phone.label }}</label>
+                    {{ regForm.phone }}
+                    <p>{{ regForm.phone.help_text }}</p>
+                    {% if regForm.errors %}
+                        {% if regForm.phone.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ regForm.error_messages.phone_exists|escape }}</strong>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </p>
+                <p>
+                    <!-- vvv Вывод ошибки для пароля не работает! vvv -->
+                    <label>{{ regForm.password1.label }}</label>
+                    {{ regForm.password1 }}
+                    <p>{{ regForm.password1.help_text }}</p>
+                    {% if regForm.errors %}
+                        {% if regForm.password1.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ regForm.error_messages.password_mismatch|escape }}</strong>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </p>
+                <p>
+                    <label>{{ regForm.password2.label }}</label>
+                    {{ regForm.password2 }}
+                    <p>{{ regForm.password2.help_text }}</p>
+                </p>
+            </div>
+            <!-- vvv Временный отладочный блок vvv -->
+            {% if regForm.errors %}
+                {% for field in regForm %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in regForm.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
     <div class="row navbutton">

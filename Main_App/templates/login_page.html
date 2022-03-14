@@ -22,6 +22,11 @@
                 {{ login_form.as_p }}
             </div>
         </div>
+        {% if login_form.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ login_form.error_messages.not_user|escape }}</strong>
+                </div>
+        {% endif %} 
         <div class="row Enter_button">
             <button type="button" onclick="location.href = '/'" class="back" name='back_button'>Назад</button>
             <button type="submit" class="enter" name="login_button"> Войти </button>
