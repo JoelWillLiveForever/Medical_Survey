@@ -34,8 +34,6 @@ def registration(request):
     #     # return redirect('.html')
     if request.method == 'POST' and 'next_button':    
         form = RegistrationForm(request.POST)
-        for field in form:
-            pass
         if form.is_valid():
             user = form.save()
             current_site = get_current_site(request)
@@ -120,8 +118,6 @@ def profile(request):
     # Создание пациентов для вывода их текущих значений
     patient_height = Patient.objects.filter(id=request.user.id).get().height
     patient_weight = Patient.objects.filter(id=request.user.id).get().weight
-    # print(patient_height)
-    # print(patient_weight)
 
     # Проверка значений пациентов
     if (patient_height != 0.0 ):

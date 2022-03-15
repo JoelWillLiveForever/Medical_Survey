@@ -65,10 +65,6 @@ class LoginForm(forms.Form):
 
 class HeightNWeightForm(UserChangeForm):
     # Форма для изменения параметров роста и веса пациента
-    # def __init__(self, height, weight):
-    #     self.height=forms.FloatField(required=False, label='Рост:', initial=height) # instance attribute
-    #     self.weight=forms.FloatField(required=False, label='Вес:', initial=weight)
-
     height = forms.FloatField(required=False, label='Рост:', initial=0.0)
     weight = forms.FloatField(required=False, label='Вес:', initial=0.0)
 
@@ -110,8 +106,6 @@ class RegistrationForm(UserCreationForm):
 
     error_messages = {
         'email_exists': 'Пользователь с таким Email уже существует!',
-        # 'email_not_valid': 'Некорректный Email-адрес!',
-        # 'password_not_valid': 'Некорректный пароль!',
         'phone_exists': 'Пользователь с указанным номером телефона уже существует!',
         'password_mismatch': 'Пароли не совпадают!',
         'birthdate_isNotYet': 'Дата рождения указывает на то, что вы ещё не родились! Укажите прошедшую дату, если вы не из будущего.',
@@ -155,11 +149,8 @@ class RegistrationForm(UserCreationForm):
                 code='email_exists',
             )
         return email
-    def clean_birthdate(self): # Вывод кода ошибки о некорректной дате
-        print('Birth_date')
-        print(self.cleaned_data.get('birth_date'))
-        print(datetime.now())
-        if self.cleaned_data.get('birth_date') > datetime.now():
+    def clean_birth_date(self): # Вывод кода ошибки о некорректной дате
+        if self.cleaned_data.get('birth_date') > datetime.date(datetime.today()):
             raise forms.ValidationError(
                 self.error_messages['birthdate_isNotYet'],
                 code='birthdate_isNotYet',
