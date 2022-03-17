@@ -23,9 +23,14 @@
             </div>
         </div>
         {% if login_form.errors %}
+        <div class="row message_alert">
+            <div class="col-md-6">
                 <div class="alert alert-danger">
                     <strong>{{ login_form.error_messages.not_user|escape }}</strong>
                 </div>
+            </div>
+            
+        </div>
         {% endif %} 
         <div class="row Enter_button">
             <button type="button" onclick="location.href = '/'" class="back" name='back_button'>Назад</button>

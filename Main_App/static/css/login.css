@@ -72,3 +72,8 @@ body {
 .errorlist.nonfield {
     display: none;
 }
+
+.message_alert{
+    display: flex;
+    justify-content: center;
+}
