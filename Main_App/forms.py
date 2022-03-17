@@ -11,6 +11,8 @@ from typing import Iterable
 import time
 from datetime import datetime
 
+from matplotlib import widgets
+
 # from django.core.validators import validate_email
 # from django.contrib.auth.password_validation import validate_password
 
@@ -103,12 +105,14 @@ class RegistrationForm(UserCreationForm):
 
     password1 = forms.CharField(required=True, label='* Пароль', max_length=320, widget=forms.PasswordInput, help_text='Не менее 8 символов, цифры и верхний регистр')
     password2 = forms.CharField(required=True, label='* Повторите пароль', max_length=320, widget=forms.PasswordInput, help_text='Не менее 8 символов, цифры и верхний регистр')
+    agreement = forms.BooleanField(required=True, widget=forms.CheckboxInput)
 
     error_messages = {
         'email_exists': 'Пользователь с таким Email уже существует!',
         'phone_exists': 'Пользователь с указанным номером телефона уже существует!',
         'password_mismatch': 'Пароли не совпадают!',
         'birthdate_isNotYet': 'Дата рождения указывает на то, что вы ещё не родились! Укажите прошедшую дату, если вы не из будущего.',
+        'notAgreed': 'Согласитесь на обработку персональных данных или валите!',
         'error': 'Форма не валидна!',
     }
 
