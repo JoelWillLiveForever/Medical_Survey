@@ -16,7 +16,7 @@ class Patient_Admin(UserAdmin):
     model = Patient
 
     # список юзеров в админке
-    list_display = ('email', 'phone', 'surname', 'name', 'lastname', 'age', 'city', 'university', 'faculty', 'is_staff', 'is_active', 'is_superuser', )
+    list_display = ('email', 'phone', 'surname', 'name', 'lastname', 'age', 'gender', 'city', 'university', 'faculty', 'is_staff', 'is_active', 'is_superuser', )
 
     # фильтр в админке
     list_filter = ('is_staff', 'is_active', 'is_superuser', )

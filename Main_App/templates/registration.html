@@ -42,11 +42,24 @@
                 <p>
                     <label>{{ regForm.city.label }}</label>
                     {{ regForm.city }}
+                    {% if regForm.errors %}
+                        {% if regForm.city.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ regForm.error_messages.choise_city|escape }}</strong>
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </p>
                 <p>
                     <label>{{ regForm.university.label }}</label>
                     {{ regForm.university }}
-                    <p>{{ regForm.university.help_text }}</p>
+                    {% if regForm.errors %}
+                        {% if regForm.university.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ regForm.error_messages.choise_university|escape }}</strong>
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </p>
                 <p>
                     <label>{{ regForm.faculty.label }}</label>
@@ -56,6 +69,13 @@
                 <p>
                     <label>{{ regForm.gender.label }}</label>
                     {{ regForm.gender }}
+                    {% if regForm.errors %}
+                        {% if regForm.gender.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ regForm.error_messages.choise_gender|escape }}</strong>
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </p>
                 <p>
                     <label>{{ regForm.birth_date.label }}</label>

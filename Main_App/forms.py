@@ -10,7 +10,7 @@ from django.contrib.auth import authenticate
 from typing import Iterable
 import time
 from datetime import datetime
-
+from .PremakedInfo import PremakedInfo
 from matplotlib import widgets
 
 # from django.core.validators import validate_email
@@ -83,11 +83,11 @@ class RegistrationForm(UserCreationForm):
     name = forms.CharField(required=True, label='* Имя', max_length=320, help_text='Не более 320 символов')
     lastname = forms.CharField(required=False, label='* Отчество', max_length=320, help_text='Не более 320 символов')
 
-    city = forms.CharField(required=False, label='* Город', max_length=320, help_text='Не более 320 символов')
-    university = forms.CharField(required=False, label='* Университет', max_length=320, help_text='Используя сокращение прим. "ВГТУ"')
+    city = forms.ChoiceField(required=True, label='* Регион прописки', choices=PremakedInfo.CITIES)
+    university = forms.ChoiceField(required=True, label='* Университет', choices=PremakedInfo.UNIVERSITIES)
     faculty = forms.CharField(required=False, label='* Факультет', max_length=320, help_text='Используя сокращение прим. "ФИТКБ"')
 
-    gender = forms.ChoiceField(required=True, label='* Пол', choices=[(1,'Мужской'), (2, 'Женский')], initial=1)
+    gender = forms.ChoiceField(required=True, label='* Пол', choices=PremakedInfo.GENDERS)
 
     MONTHS = {
     1:('Январь'), 2:('Февраль'), 3:('Март'), 4:('Апрель'),
@@ -110,6 +110,9 @@ class RegistrationForm(UserCreationForm):
     error_messages = {
         'email_exists': 'Пользователь с таким Email уже существует!',
         'phone_exists': 'Пользователь с указанным номером телефона уже существует!',
+        'choise_city': 'Выберите регион прописки из списка!',
+        'choise_university': 'Выберите учебное заведение из списка!',
+        'choise_gender': 'Укажите ваш пол!',
         'password_mismatch': 'Пароли не совпадают!',
         'birthdate_isNotYet': 'Дата рождения указывает на то, что вы ещё не родились! Укажите прошедшую дату, если вы не из будущего.',
         'notAgreed': 'Согласитесь на обработку персональных данных или валите!',
@@ -153,13 +156,37 @@ class RegistrationForm(UserCreationForm):
                 code='email_exists',
             )
         return email
-    def clean_birth_date(self): # Вывод кода ошибки о некорректной дате
+    def clean_birth_date(self):
         if self.cleaned_data.get('birth_date') > datetime.date(datetime.today()):
             raise forms.ValidationError(
                 self.error_messages['birthdate_isNotYet'],
                 code='birthdate_isNotYet',
             )
         return self.data['birth_date']
+
+    def clean_gender(self):
+        if self.cleaned_data.get('gender') == '0':
+            raise forms.ValidationError(
+                self.error_messages['choise_gender'],
+                code='choise_gender',
+            )
+        return self.data['gender']
+
+    def clean_city(self):
+        if self.cleaned_data.get('city') == '0':
+            raise forms.ValidationError(
+                self.error_messages['choise_city'],
+                code='choise_city',
+            )
+        return self.data['city']
+
+    def clean_university(self):
+        if self.cleaned_data.get('university') == '0':
+            raise forms.ValidationError(
+                self.error_messages['choise_university'],
+                code='choise_university',
+            )
+        return self.data['university']
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
@@ -182,9 +209,9 @@ class RegistrationForm(UserCreationForm):
         user.faculty = self.cleaned_data['faculty']
         user.gender = self.cleaned_data['gender']
         user.birth_date = self.cleaned_data['birth_date']
-
+        print(datetime.date(datetime.today()))
         # Получаем возраст пользователя из даты рождения с помощью деления на timedelta (при условии того, что каждый 4 год - високосный)
-        age = (date.today() - self.cleaned_data['birth_date']) // timedelta(days=365.2425)
+        age = (datetime.date(datetime.today()) - datetime.date(datetime.strptime(self.cleaned_data.get('birth_date'), '%Y-%m-%d'))) // timedelta(days=365.2425)
         user.age = age
 
         user.email = self.cleaned_data['email']

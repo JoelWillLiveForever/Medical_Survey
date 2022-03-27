@@ -1,3 +1,4 @@
+from re import I
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
@@ -5,6 +6,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
+from numpy import where
 
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
@@ -12,6 +14,7 @@ from django.core.mail import EmailMessage
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, logout
 
+from .PremakedInfo import PremakedInfo
 from .models import *
 from .forms import *
 
@@ -32,8 +35,21 @@ def registration(request):
     # if request.user.is_authenticated:
     #     pass
     #     # return redirect('.html')
-    if request.method == 'POST' and 'next_button':    
+    if request.method == 'POST' and 'next_button':
+        # print(request.POST)
+        # post = request.POST.copy()
+        # for i in range(0, len(PremakedInfo.UNIVERSITIES)):
+        #     print(post['university'])
+        #     print(PremakedInfo.UNIVERSITIES[i][1])
+        #     if int(post['university']) == i:
+        #         print(post['university'])
+        #         post.update({'university': post['university'], 'university': PremakedInfo.UNIVERSITIES[i][1]})
+        #         break
+                    
+        # request.POST = post
+        # print(request.POST)
         form = RegistrationForm(request.POST)
+        # print(form)
         if form.is_valid():
             user = form.save()
             current_site = get_current_site(request)
@@ -48,6 +64,31 @@ def registration(request):
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(mail_subject, message, to=[to_email])
             email.send()
+
+            #Изменение полей на основе select-бокса
+            post = request.POST.copy()
+
+            #Изменение пола
+            for i in range(0, len(PremakedInfo.GENDERS)):
+                if int(post['gender']) == i:
+                    post.update({'gender': post['gender'], 'gender': PremakedInfo.GENDERS[i][1]})
+                    break
+
+            #Изменение названия города из списка названий
+            for i in range(0, len(PremakedInfo.CITIES)):
+                if int(post['city']) == i:
+                    post.update({'city': post['city'], 'city': PremakedInfo.CITIES[i][1]})
+                    break
+
+            #Изменение названия учебного заведения из списка названий
+            for i in range(0, len(PremakedInfo.UNIVERSITIES)):
+                if int(post['university']) == i:
+                    post.update({'university': post['university'], 'university': PremakedInfo.UNIVERSITIES[i][1]})
+                    break
+            #Внесение изменений для созданного выше пользователя
+            request.POST = post
+            Patient.objects.filter(id=user.id).update(university=request.POST.get('university'), city=request.POST.get('city'), gender=request.POST.get('gender'))
+
             return redirect('acc_active_sent')
         context= {
             'regForm': form,
@@ -143,7 +184,7 @@ def profile(request):
         formHW = HeightNWeightForm(data)
 
     #formHW = HeightNWeightForm()
-    context = {'formHW': formHW}
+    context = {'formHW': formHW, 'Universities': PremakedInfo.UNIVERSITIES}
 
     return render(request, 'profile.html', context)
 
