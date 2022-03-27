@@ -58,3 +58,10 @@ class Patient(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = ('Пациент')
         verbose_name_plural = ('Пациенты')
+
+class Region(models.Model):
+    name = models.CharField(primary_key=True, max_length=50)
+
+class University(models.Model):
+    name = models.CharField(primary_key=True, max_length=150)
+    region_name = models.ForeignKey(Region, on_delete=models.CASCADE)
