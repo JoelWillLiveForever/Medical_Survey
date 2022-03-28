@@ -41,7 +41,14 @@ class Patient_Admin(UserAdmin):
     # сортировка списка по полям
     ordering = ('email', 'phone', 'surname', 'name', 'lastname',)
 
+class Analysis_Admin(admin.ModelAdmin):
+    model = Analysis
+
+class Parameter_Admin(admin.ModelAdmin):
+    model = Parameter
 
 admin.site.unregister(mod.Group)
 
 admin.site.register(Patient, Patient_Admin)
+admin.site.register(Analysis, Analysis_Admin)
+admin.site.register(Parameter, Parameter_Admin)

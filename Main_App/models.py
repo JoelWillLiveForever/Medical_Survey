@@ -1,4 +1,5 @@
 from enum import Enum
+from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -6,6 +7,7 @@ from django.contrib.auth.models import PermissionsMixin
 from .managers import *
 
 from django.utils import timezone
+import datetime
 
 # Create your models here.
 
@@ -58,3 +60,14 @@ class Patient(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = ('Пациент')
         verbose_name_plural = ('Пациенты')
+
+class Analysis(models.Model):
+    type = models.CharField(max_length=150)
+    time = models.DateTimeField()
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+
+class Parameter(models.Model):
+    name = models.CharField(max_length=150)
+    result = models.CharField(max_length=150)
+
+    analysis = models.ForeignKey(Analysis, on_delete=models.CASCADE)

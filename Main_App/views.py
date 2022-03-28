@@ -148,6 +148,12 @@ def login_page(request):
     return render(request, 'login_page.html', context)
 
 def profile(request):
+    ##### ПРИМЕР
+    parameters = Parameter.objects.filter(analysis=(Analysis.objects.get(patient=request.user.id)))
+
+    for obj in parameters:
+        print(obj.name + " " + obj.result)
+
     if request.method == 'POST' and 'button_logout' in request.POST:
         logout(request)
         return redirect('login_page')
