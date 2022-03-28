@@ -37,7 +37,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 360px;
+    height: auto;
     width: 1120px;
     font-size: 36px;
     background-color: #ebebeb;
