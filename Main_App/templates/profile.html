@@ -49,15 +49,45 @@
             <div class="analysis_block">
                 <p>Анализы</p>
                 <div class="row analys1">
+                    {% for anal in Analysis %}
+                    {% if anal %}
                     <div class="col-md-10 analysis_info">
+                        <p>{{ anal.type }}</p>
+                        <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time }}</a>
+                        <button tag="add_new_parameters" onclick="showModalWin('{{ anal.id }}')">
+                            +
+                        </button>
+                        <div class="popup" id="popup{{ anal.id }}">
+                            <!-- Модалка для параметров анализа -->
+                            ыыыыыы
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-md-10 analysis_info">
+                        Нет заполненных анализов!
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <!-- <div class="col-md-10 analysis_info">
                         <p>ОАК</p>
                     </div>
                     <div class="col-md-10 analysis_info">
                         <p>ТГ</p>
+                        <button tag="add_new_parameters">
+                            +
+                        </button>
                     </div>
                     <div class="col-md-10 analysis_info">
                         <p>Глюкоза</p>
-                    </div>
+                        <button tag="add_new_parameters">
+                            +
+                        </button>
+                    </div> -->
+                    <center>
+                        <button tag="add_new_analysis">
+                            +
+                        </button>
+                    </center>
                 </div>
             </div>
         </div>

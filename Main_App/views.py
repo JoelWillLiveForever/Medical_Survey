@@ -7,6 +7,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from numpy import where
+from datetime import datetime
 
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
@@ -148,11 +149,6 @@ def login_page(request):
     return render(request, 'login_page.html', context)
 
 def profile(request):
-    ##### ПРИМЕР
-    parameters = Parameter.objects.filter(analysis=(Analysis.objects.get(patient=request.user.id)))
-
-    for obj in parameters:
-        print(obj.name + " " + obj.result)
 
     if request.method == 'POST' and 'button_logout' in request.POST:
         logout(request)
@@ -189,8 +185,19 @@ def profile(request):
         data = {'height': 0.0, 'weight': 0.0}
         formHW = HeightNWeightForm(data)
 
+    parameters = Parameter.objects.filter(analysis=(Analysis.objects.get(patient=request.user.id)))
+    analysis = Analysis.objects.filter(patient=request.user.id)
+
+    for obj in parameters:
+        print(obj.name + " " + obj.result)
+    for obj in analysis:
+        print(obj.type)
+
     #formHW = HeightNWeightForm()
-    context = {'formHW': formHW, 'Universities': PremakedInfo.UNIVERSITIES}
+    context = {'formHW': formHW, 
+               'Universities': PremakedInfo.UNIVERSITIES,
+               'Parameters': parameters,
+               'Analysis': analysis}
 
     return render(request, 'profile.html', context)
 

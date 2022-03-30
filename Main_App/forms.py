@@ -223,3 +223,10 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class AnalysisForm():
+    class Meta: 
+        model = Parameter # ???? анализы или параметры??
+        fields = (
+             #????
+       )
