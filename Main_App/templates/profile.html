@@ -7,6 +7,42 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" type='text/css' href='{% static "css/profile.css" %}'>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    // wrap request in a function:
+    function send_typeNtoken(type) {
+        console.log(type)
+    
+        const csrftoken = getCookie('csrftoken');
+    
+        $.ajax({
+        url : 'profile',
+        data : {
+            'csrfmiddlewaretoken' : csrftoken,
+            'type' : type,
+        },
+        method : 'POST'});
+    }
+    
+    // https://stackoverflow.com/questions/65309532/how-to-pass-data-from-ajax-to-django-view
+</script>
 
 <div class="container body-form">
     <div class="row tabs">
@@ -54,7 +90,10 @@
                     <div class="col-md-10 analysis_info">
                         <p>{{ anal.type }}</p>
                         <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time }}</a>
-                        <button tag="add_new_parameters" onclick="showModalWin('{{ anal.id }}')">
+                        <!-- <button tag="add_new_parameters" name='add_new_parameters' onclick="showModalWin('{{ anal.id }}')">
+                            +
+                        </button> -->
+                        <button tag="add_new_parameters" name='add_new_parameters' onclick="send_typeNtoken('OAK')">
                             +
                         </button>
                         <div class="popup" id="popup{{ anal.id }}">
@@ -105,14 +144,3 @@
 </div>
 
 {% endblock %}
-
-
-<!-- второй варик со 2 чатсью общей инфы, тоже ме -->
-<!-- <div class="part2">
-                <p>Рост:</p>
-                <p>Учебное заведение:</p>
-            </div>
-            <div class="part3">
-                <p>Вес :</p>
-                <p>Факультет:</p>
-            </div> -->

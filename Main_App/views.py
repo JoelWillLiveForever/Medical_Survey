@@ -6,6 +6,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
+from matplotlib.style import context
 from numpy import where
 from datetime import datetime
 
@@ -149,6 +150,14 @@ def login_page(request):
     return render(request, 'login_page.html', context)
 
 def profile(request):
+    if request.method == 'POST':
+        print('ТИП = ' + request.POST['type'])
+        if request.POST['type'] == 'OAK':
+            # редирект на страницу с формой OAKForm
+            return redirect('add_new_analysis')
+        elif request.POST['type'] == 'SPID':
+            # редирект на страницу с формой SPIDTest
+            pass
 
     if request.method == 'POST' and 'button_logout' in request.POST:
         logout(request)
@@ -157,7 +166,8 @@ def profile(request):
         form = HeightNWeightForm(request.POST)
         if form.is_valid(): # Изменение значений роста и веса
             Patient.objects.filter(id=request.user.id).update(height=request.POST.get('height'), weight=request.POST.get('weight'))
-    
+    if request.method == 'POST' and 'button_logout' in request.POST:
+        pass
     # Создание пациентов для вывода их текущих значений
     patient_height = Patient.objects.filter(id=request.user.id).get().height
     patient_weight = Patient.objects.filter(id=request.user.id).get().weight
@@ -200,6 +210,11 @@ def profile(request):
                'Analysis': analysis}
 
     return render(request, 'profile.html', context)
+
+def add_new_analysis(request):
+    analysisForm = OAKForm(request)
+    context = {'analysisForm': analysisForm,}
+    return render(request, 'add_new_analysis.html', context)
 
 def questionA(request):
     context= {

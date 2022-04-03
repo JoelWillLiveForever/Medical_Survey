@@ -13,6 +13,8 @@ from datetime import datetime
 from .PremakedInfo import PremakedInfo
 from matplotlib import widgets
 
+# from abc import ABC, abstractmethod
+
 # from django.core.validators import validate_email
 # from django.contrib.auth.password_validation import validate_password
 
@@ -224,9 +226,24 @@ class RegistrationForm(UserCreationForm):
             user.save()
         return user
 
-class AnalysisForm():
-    class Meta: 
-        model = Parameter # ???? анализы или параметры??
-        fields = (
-             #????
-       )
+# class AbstractAnalysisForm(ABC):
+
+#     @abstractmethod
+#     def get_form(self):
+#         pass
+
+#     class Meta: 
+#         model = Parameter # ???? анализы или параметры??
+#         fields = (
+#              #????
+#        )
+
+# class OAKForm(AbstractAnalysisForm):
+#     def get_form(self):
+#         pass
+
+class OAKForm(forms.Form):
+    gemoglobin = forms.IntegerField(label='Гемоглобин')
+    leycocite = forms.IntegerField(label='Лейкоциты')
+    eritrocity = forms.IntegerField(label='Эритроциты')
+    

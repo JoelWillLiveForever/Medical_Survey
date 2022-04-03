@@ -1,3 +1,5 @@
+// var form;
+
 function showModalWin(analysis_id) {
     var darkLayer = document.createElement('div'); // слой затемнения
     darkLayer.id = 'shadow'; // id чтобы подхватить стиль
@@ -12,3 +14,26 @@ function showModalWin(analysis_id) {
         return false;
     };
 }
+
+
+
+// function proceed() {
+//     // if (form != null)
+//     // {
+//     //     form = document.createElement('form');
+
+//     //     form.setAttribute('method', 'post');
+//     //     form.style.display = 'hidden';
+
+//     //     document.body.appendChild(form)
+//     // }
+
+//     var form = document.createElement('form');
+
+//     form.setAttribute('method', 'post');
+//     form.style.display = 'hidden';
+
+//     document.body.appendChild(form)
+
+//     form.submit();
+// }

@@ -1,0 +1,19 @@
+{% extends 'profileBase.html' %}
+
+{% block title %}
+Личный кабинет
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="container body-form">
+    <div class="formHW">
+        <p>{{ analysisForm.gemoglobin.label }}: {{ analysisForm.gemoglobin }}</p> 
+        <p>{{ analysisForm.leycocite.label }}: {{ analysisForm.leycocite }}</p>
+        <p>{{ analysisForm.eritrocity.label }}: {{ analysisForm.eritrocity }}</p>
+        <button hidden type="submit" class="submitHW" name='formHW_submit'>✓</button>
+    </div>
+</div>
+
+{% endblock %}
