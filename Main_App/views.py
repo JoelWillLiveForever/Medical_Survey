@@ -150,14 +150,16 @@ def login_page(request):
     return render(request, 'login_page.html', context)
 
 def profile(request):
-    if request.method == 'POST':
-        print('ТИП = ' + request.POST['type'])
-        if request.POST['type'] == 'OAK':
-            # редирект на страницу с формой OAKForm
-            return redirect('add_new_analysis')
-        elif request.POST['type'] == 'SPID':
-            # редирект на страницу с формой SPIDTest
-            pass
+    if request.method == 'POST' and 'add_new_parameters':
+        # print('ТИП = ' + request.POST['type'])
+        # if request.POST['type'] == 'OAK':
+        #     # редирект на страницу с формой OAKForm
+        #     print('Redirected')
+            
+        # elif request.POST['type'] == 'SPID':
+        #     # редирект на страницу с формой SPIDTest
+        #     pass
+        return redirect('add_new_analysis')
 
     if request.method == 'POST' and 'button_logout' in request.POST:
         logout(request)
@@ -212,7 +214,11 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 def add_new_analysis(request):
-    analysisForm = OAKForm(request)
+    analysisForm = OAKForm(request.POST)
+    if request.method == 'POST' and 'submitAnalysis':
+        if analysisForm.is_valid():
+            analysisForm.save()
+        return redirect('profile')
     context = {'analysisForm': analysisForm,}
     return render(request, 'add_new_analysis.html', context)
 

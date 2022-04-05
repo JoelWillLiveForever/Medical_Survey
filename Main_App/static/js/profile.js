@@ -16,6 +16,38 @@ function showModalWin(analysis_id) {
 }
 
 
+// ХЗ
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// wrap request in a function:
+function send_typeNtoken(type) {
+    console.log(type)
+
+    const csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+    url : 'profile',
+    data : {
+        'csrfmiddlewaretoken' : csrftoken,
+        'type' : type,
+    },
+    method : 'POST'});
+}
+// https://stackoverflow.com/questions/65309532/how-to-pass-data-from-ajax-to-django-view
 
 // function proceed() {
 //     // if (form != null)

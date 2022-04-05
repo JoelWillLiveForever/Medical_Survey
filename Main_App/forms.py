@@ -243,7 +243,10 @@ class RegistrationForm(UserCreationForm):
 #         pass
 
 class OAKForm(forms.Form):
-    gemoglobin = forms.IntegerField(label='Гемоглобин')
-    leycocite = forms.IntegerField(label='Лейкоциты')
-    eritrocity = forms.IntegerField(label='Эритроциты')
-    
+    gemoglobin = forms.FloatField(label='Гемоглобин')
+    leycocite = forms.FloatField(label='Лейкоциты')
+    eritrocity = forms.FloatField(label='Эритроциты')
+    def save(self, commit=True):
+        # Дописать функцию save для сохранения параметров каждого параметра и присвоения их к анализу
+        # analysis = super(OAKForm, self).save(commit=False)
+        pass
