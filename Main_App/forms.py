@@ -1,5 +1,7 @@
 from email.policy import default
 from pyexpat import model
+from unicodedata import name
+from urllib import request
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
@@ -19,6 +21,16 @@ from matplotlib import widgets
 # from django.contrib.auth.password_validation import validate_password
 
 from .models import *
+
+MONTHS = {
+    1:('Январь'), 2:('Февраль'), 3:('Март'), 4:('Апрель'),
+    5:('Май'), 6:('Июнь'), 7:('Июль'), 8:('Август'),
+    9:('Сентябрь'), 10:('Октябрь'), 11:('Ноябрь'), 12:('Декабрь')
+    }
+
+YEARS = []
+for i in range(0, 2021-1920): #Заполнение селектора дат годами от 1922 до 2022
+    YEARS.append(str((i-2022)*-1))
 
 class PatientCreationForm(UserCreationForm):
 
@@ -91,14 +103,6 @@ class RegistrationForm(UserCreationForm):
 
     gender = forms.ChoiceField(required=True, label='* Пол', choices=PremakedInfo.GENDERS)
 
-    MONTHS = {
-    1:('Январь'), 2:('Февраль'), 3:('Март'), 4:('Апрель'),
-    5:('Май'), 6:('Июнь'), 7:('Июль'), 8:('Август'),
-    9:('Сентябрь'), 10:('Октябрь'), 11:('Ноябрь'), 12:('Декабрь')
-    }
-    YEARS = []
-    for i in range(0, 2021-1920): #Заполнение селектора дат годами от 1922 до 2022
-        YEARS.append(str((i-2022)*-1))
     birth_date = forms.DateField(widget=forms.SelectDateWidget(years=YEARS, months=MONTHS), label='* Дата рождения')
 
     email = forms.EmailField(required=True, label='* Адрес электронной почты', max_length=320, help_text='Не более 320 символов')
@@ -243,10 +247,22 @@ class RegistrationForm(UserCreationForm):
 #         pass
 
 class OAKForm(forms.Form):
+    date = forms.DateField(widget=forms.SelectDateWidget(years=YEARS, months=MONTHS), label='Дата анализа')
+
     gemoglobin = forms.FloatField(label='Гемоглобин')
     leycocite = forms.FloatField(label='Лейкоциты')
     eritrocity = forms.FloatField(label='Эритроциты')
-    def save(self, commit=True):
-        # Дописать функцию save для сохранения параметров каждого параметра и присвоения их к анализу
-        # analysis = super(OAKForm, self).save(commit=False)
-        pass
+
+    def save(self, patient, commit=True):
+        curr_analysis = Analysis(type='Общий Анализ Крови', time=self.cleaned_data['date'], patient=patient)
+
+        p_gemoglobin = Parameter(name='Гемоглобин', result=self.cleaned_data['gemoglobin'], analysis=curr_analysis)
+        p_leycocite = Parameter(name='Лейкоциты', result=self.cleaned_data['leycocite'], analysis=curr_analysis)
+        p_eritrocity = Parameter(name='Эритроциты', result=self.cleaned_data['eritrocity'], analysis=curr_analysis)
+
+        if commit:
+            curr_analysis.save()
+
+            p_gemoglobin.save()
+            p_leycocite.save()
+            p_eritrocity.save()

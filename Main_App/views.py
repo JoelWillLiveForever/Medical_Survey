@@ -150,7 +150,7 @@ def login_page(request):
     return render(request, 'login_page.html', context)
 
 def profile(request):
-    if request.method == 'POST' and 'add_new_parameters':
+    if request.method == 'POST' and 'add_new_parameters' in request.POST:
         # print('ТИП = ' + request.POST['type'])
         # if request.POST['type'] == 'OAK':
         #     # редирект на страницу с формой OAKForm
@@ -168,8 +168,7 @@ def profile(request):
         form = HeightNWeightForm(request.POST)
         if form.is_valid(): # Изменение значений роста и веса
             Patient.objects.filter(id=request.user.id).update(height=request.POST.get('height'), weight=request.POST.get('weight'))
-    if request.method == 'POST' and 'button_logout' in request.POST:
-        pass
+
     # Создание пациентов для вывода их текущих значений
     patient_height = Patient.objects.filter(id=request.user.id).get().height
     patient_weight = Patient.objects.filter(id=request.user.id).get().weight
@@ -197,7 +196,10 @@ def profile(request):
         data = {'height': 0.0, 'weight': 0.0}
         formHW = HeightNWeightForm(data)
 
-    parameters = Parameter.objects.filter(analysis=(Analysis.objects.get(patient=request.user.id)))
+    # analysis_arr = Analysis.objects.filter(patient=request.user.id)
+    # print(f'Analysis_ARR: {analysis_arr}')
+
+    parameters = Parameter.objects.filter(analysis=(Analysis.objects.filter(patient=request.user.id))[0])
     analysis = Analysis.objects.filter(patient=request.user.id)
 
     for obj in parameters:
@@ -217,7 +219,7 @@ def add_new_analysis(request):
     analysisForm = OAKForm(request.POST)
     if request.method == 'POST' and 'submitAnalysis':
         if analysisForm.is_valid():
-            analysisForm.save()
+            analysisForm.save(patient=Patient.objects.get(id=request.user.id))
         return redirect('profile')
     context = {'analysisForm': analysisForm,}
     return render(request, 'add_new_analysis.html', context)
