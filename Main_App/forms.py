@@ -246,14 +246,27 @@ class RegistrationForm(UserCreationForm):
 #     def get_form(self):
 #         pass
 
+DATE_INPUT_FORMATS = ['%Y-%m-%d',
+                    '%m/%d/%Y',
+                    '%m/%d/%y',
+                    '%b %d %Y',
+                    '%b %d, %Y',
+                    '%d %b %Y',
+                    '%d %b, %Y',
+                    '%B %d %Y',
+                    '%B %d, %Y',
+                    '%d %B %Y',
+                    '%d %B, %Y']
+
 class OAKForm(forms.Form):
-    date = forms.DateField(widget=forms.SelectDateWidget(years=YEARS, months=MONTHS), label='Дата анализа')
+    date = forms.DateField(input_formats=DATE_INPUT_FORMATS, widget=forms.SelectDateWidget(years=YEARS, months=MONTHS), label='Дата анализа')
 
     gemoglobin = forms.FloatField(label='Гемоглобин')
     leycocite = forms.FloatField(label='Лейкоциты')
     eritrocity = forms.FloatField(label='Эритроциты')
 
     def save(self, patient, commit=True):
+        dateAnalysis = datetime.strptime(self.cleaned_data['date'], '%Y-%m-%d').strftime('%d/%m/%y')
         curr_analysis = Analysis(type='Общий Анализ Крови', time=self.cleaned_data['date'], patient=patient)
 
         p_gemoglobin = Parameter(name='Гемоглобин', result=self.cleaned_data['gemoglobin'], analysis=curr_analysis)
@@ -266,3 +279,52 @@ class OAKForm(forms.Form):
             p_gemoglobin.save()
             p_leycocite.save()
             p_eritrocity.save()
+
+class MeasurementForm(forms.Form):
+    date = forms.DateField(input_formats=DATE_INPUT_FORMATS,widget=forms.SelectDateWidget(years=YEARS, months=MONTHS,), label='Дата измерений')
+
+    sad = forms.FloatField(label='САД (Систолическое артериальное давление)')
+    dad = forms.FloatField(label='ДАД (Диастолическое артериальное давление)')
+    chss = forms.FloatField(label='ЧСС (Число сердечных сокращений)')
+    chdd = forms.FloatField(label='ЧДД (Число дыхательных движений)')
+
+    def save(self, patient, commit=True):
+        dateAnalysis = datetime.strptime(str(self.cleaned_data['date']), '%Y-%m-%d').strftime('%d/%m/%y')
+        curr_analysis = Analysis(type='Данные измерений', time=self.cleaned_data['date'], patient=patient)
+        #print(f"Date anala: {dateAnalysis}")
+        p_sad = Parameter(name='САД', result=self.cleaned_data['sad'], analysis=curr_analysis)
+        p_dad  = Parameter(name='ДАД', result=self.cleaned_data['dad'], analysis=curr_analysis)
+        p_chss = Parameter(name='ЧСС', result=self.cleaned_data['chss'], analysis=curr_analysis)
+        p_chdd = Parameter(name='ЧДД', result=self.cleaned_data['chdd'], analysis=curr_analysis)
+
+        if commit:
+            curr_analysis.save()
+
+            p_sad.save()
+            p_dad.save()
+            p_chss.save()
+            p_chdd.save()
+
+class CardiovisorForm(forms.Form):
+    date = forms.DateField(input_formats=DATE_INPUT_FORMATS, widget=forms.SelectDateWidget(years=YEARS, months=MONTHS), label='Дата измерений')
+
+    mio_index = forms.FloatField(label='Индекс миокарда')
+    g1 = forms.FloatField(label='G1')
+    g2 = forms.FloatField(label='G2')
+    g3 = forms.FloatField(label='G3')
+
+    def save(self, patient, commit=True):
+        curr_analysis = Analysis(type='Данные кардиовизора', time=self.cleaned_data['date'], patient=patient)
+
+        p_mio_index = Parameter(name='Индекс миокарда', result=self.cleaned_data['mio_index'], analysis=curr_analysis)
+        p_g1 = Parameter(name='G1', result=self.cleaned_data['g1'], analysis=curr_analysis)
+        p_g2 = Parameter(name='G2', result=self.cleaned_data['g2'], analysis=curr_analysis)
+        p_g3 = Parameter(name='G3', result=self.cleaned_data['g3'], analysis=curr_analysis)
+
+        if commit:
+            curr_analysis.save()
+
+            p_mio_index.save()
+            p_g1.save()
+            p_g2.save()
+            p_g3.save()

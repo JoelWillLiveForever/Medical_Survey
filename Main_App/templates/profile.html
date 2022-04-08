@@ -50,51 +50,75 @@
             <div class="analysis_block">
                 <p>Анализы</p>
                 <div class="row analys1">
-                    {% for anal in Analysis %}
-                    {% if anal %}
                     <div class="col-md-10 analysis_info">
                         <form method="post">
                             {% csrf_token %}
-                            <p>{{ anal.type }}</p>
+                            <p>Данные измерений</p>
+                            {% for anal in Analysis %}
+                            {% if anal.type == "Данные измерений" %}
+                            <p>|</p>
                             <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time }}</a>
-                            <button type="submit" tag="add_new_parameters" name='add_new_parameters' >
-                                +
-                            </button>
                             <div class="popup" id="popup{{ anal.id }}">
                                 <!-- Модалка для вывода параметров анализа -->
-                                Здесь должны будут быть все параметры анализа без возможности изменения
-                                <!-- {% for parameter in anal.parameters %}
-                                    {{ parameter.name }}: {{ parameter.result }}
-                                {% endfor %} -->
+                                {% if ParametersMeasure %}
+                                {% for parameter in ParametersMeasure %}
+                                    <p>{{ parameter.name }}: {{ parameter.result }}</p>
+                                {% endfor %}
+                                {% endif %}
                             </div>
+                            {% endif %}
+                            {% endfor %}
+                            <button type="submit" tag="add_new_parameters" name='add_new_parameters_toMeasure' >
+                                +
+                            </button>
                         </form>
                     </div>
-                    {% else %}
                     <div class="col-md-10 analysis_info">
-                        Нет заполненных анализов!
-                    </div>
-                    {% endif %}
-                    {% endfor %}
-                    <!-- <div class="col-md-10 analysis_info">
-                        <p>ОАК</p>
+                        <form method="post">
+                            {% csrf_token %}
+                            <p>Общий Анализ Крови</p>
+                            {% for anal in Analysis %}
+                            {% if anal.type == "Общий Анализ Крови" %}
+                            <p>|</p>
+                            <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time }}</a>
+                            <div class="popup" id="popup{{ anal.id }}">
+                                <!-- Модалка для вывода параметров анализа -->
+                                {% if ParametersOAK %}
+                                {% for parameter in ParametersOAK %}
+                                    <p>{{ parameter.name }}: {{ parameter.result }}</p>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <button type="submit" tag="add_new_parameters" name='add_new_parameters_toOAK' >
+                                +
+                            </button>
+                        </form>
                     </div>
                     <div class="col-md-10 analysis_info">
-                        <p>ТГ</p>
-                        <button tag="add_new_parameters">
-                            +
-                        </button>
+                        <form method="post">
+                            {% csrf_token %}
+                            <p>Данные кардиовизора</p>
+                            {% for anal in Analysis %}
+                            {% if anal.type == "Данные кардиовизора" %}
+                            <p>|</p>
+                            <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time }}</a>
+                            <div class="popup" id="popup{{ anal.id }}">
+                                <!-- Модалка для вывода параметров анализа -->
+                                {% if ParametersCardio %}
+                                {% for parameter in ParametersCardio %}
+                                    <p>{{ parameter.name }}: {{ parameter.result }}</p>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            <button type="submit" tag="add_new_parameters" name='add_new_parameters_toCardio' >
+                                +
+                            </button>
+                        </form>
                     </div>
-                    <div class="col-md-10 analysis_info">
-                        <p>Глюкоза</p>
-                        <button tag="add_new_parameters">
-                            +
-                        </button>
-                    </div> -->
-                    <center>
-                        <button tag="add_new_analysis">
-                            +
-                        </button>
-                    </center>
                 </div>
             </div>
         </div>

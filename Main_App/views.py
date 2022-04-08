@@ -149,16 +149,19 @@ def login_page(request):
 
     return render(request, 'login_page.html', context)
 
+
 def profile(request):
-    if request.method == 'POST' and 'add_new_parameters' in request.POST:
-        # print('ТИП = ' + request.POST['type'])
-        # if request.POST['type'] == 'OAK':
-        #     # редирект на страницу с формой OAKForm
-        #     print('Redirected')
-            
-        # elif request.POST['type'] == 'SPID':
-        #     # редирект на страницу с формой SPIDTest
-        #     pass
+    #Контекстная переменная, меняет своё значение в зависимости от добавляемого анализа
+    #Влияет на изменение формы для заполнения анализа
+    global context_analysis
+    if request.method == 'POST' and 'add_new_parameters_toMeasure' in request.POST:
+        context_analysis = 'Measure'
+        return redirect('add_new_analysis')
+    if request.method == 'POST' and 'add_new_parameters_toOAK' in request.POST:
+        context_analysis = 'OAK'
+        return redirect('add_new_analysis')
+    if request.method == 'POST' and 'add_new_parameters_toCardio' in request.POST:
+        context_analysis = 'Cardio'
         return redirect('add_new_analysis')
 
     if request.method == 'POST' and 'button_logout' in request.POST:
@@ -198,30 +201,63 @@ def profile(request):
 
     # analysis_arr = Analysis.objects.filter(patient=request.user.id)
     # print(f'Analysis_ARR: {analysis_arr}')
+    
+    parametersOAK=None
+    parametersMeasure=None
+    parametersCardio=None
 
-    parameters = Parameter.objects.filter(analysis=(Analysis.objects.filter(patient=request.user.id))[0])
+    analysis = Analysis.objects.filter(patient=request.user.id, type='Данные измерений')
+    if analysis:
+        parametersMeasure = Parameter.objects.filter(analysis=analysis[0])
+    analysis = Analysis.objects.filter(patient=request.user.id, type='Общий Анализ Крови')
+    if analysis:
+        parametersOAK = Parameter.objects.filter(analysis=analysis[0])
+    analysis = Analysis.objects.filter(patient=request.user.id, type='Данные кардиовизора')
+    if analysis:
+        parametersCardio = Parameter.objects.filter(analysis=analysis[0])
     analysis = Analysis.objects.filter(patient=request.user.id)
 
-    for obj in parameters:
-        print(obj.name + " " + obj.result)
-    for obj in analysis:
-        print(obj.type)
+    # for obj in parametersOAK:
+    #     print(obj.name + " " + obj.result)
+    # for obj in parametersMeasure:
+    #     print(obj.name + " " + obj.result)
+    # for obj in analysis:
+    #     print(obj.type)
 
-    #formHW = HeightNWeightForm()
     context = {'formHW': formHW, 
                'Universities': PremakedInfo.UNIVERSITIES,
-               'Parameters': parameters,
+               'ParametersOAK': parametersOAK,
+               'ParametersMeasure': parametersMeasure,
+               'ParametersCardio': parametersCardio,
                'Analysis': analysis}
 
     return render(request, 'profile.html', context)
 
 def add_new_analysis(request):
-    analysisForm = OAKForm(request.POST)
-    if request.method == 'POST' and 'submitAnalysis':
-        if analysisForm.is_valid():
-            analysisForm.save(patient=Patient.objects.get(id=request.user.id))
+    analysisForm = None
+
+    if context_analysis == 'Measure':
+        analysisForm = MeasurementForm(request.POST)
+    elif context_analysis == 'OAK':
+        analysisForm = OAKForm(request.POST)
+    elif context_analysis == 'Cardio':
+        analysisForm = CardiovisorForm(request.POST)
+    else:
         return redirect('profile')
-    context = {'analysisForm': analysisForm,}
+
+    if request.method == 'POST' and 'submitAnalysis' in request.POST:
+        print(f"Дата анализа: {request.POST['date']}")
+        post=request.POST.copy()
+        post.update({'date': post['date'], 'date': datetime.strptime(str(post['date']), '%Y-%m-%d').strftime('%d-%m-%Y')})
+        request.POST = post
+        if analysisForm.is_valid():
+            print(f"Дата анализа: {request.POST['date']}")
+            analysisForm.save(patient=Patient.objects.get(id=request.user.id))
+        else:
+            print(analysisForm.errors)
+        return redirect('profile')
+    context = {'analysisForm': analysisForm,
+               'context_analysis': context_analysis}
     return render(request, 'add_new_analysis.html', context)
 
 def questionA(request):
