@@ -222,7 +222,7 @@ def profile(request):
     # for obj in parametersMeasure:
     #     print(obj.name + " " + obj.result)
     # for obj in analysis:
-    #     print(obj.type)
+    #     print(type(obj.time))
 
     context = {'formHW': formHW, 
                'Universities': PremakedInfo.UNIVERSITIES,

@@ -63,7 +63,7 @@ class Patient(AbstractBaseUser, PermissionsMixin):
 
 class Analysis(models.Model):
     type = models.CharField(max_length=150)
-    time = models.DateField(default=date.today())
+    time = models.DateTimeField(default=date.today())
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
 
 class Parameter(models.Model):

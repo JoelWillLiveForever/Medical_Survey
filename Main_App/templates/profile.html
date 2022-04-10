@@ -57,7 +57,7 @@
                             {% for anal in Analysis %}
                             {% if anal.type == "Данные измерений" %}
                             <p>|</p>
-                            <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time }}</a>
+                            <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time|date:"d.m.Y" }}</a>
                             <div class="popup" id="popup{{ anal.id }}">
                                 <!-- Модалка для вывода параметров анализа -->
                                 {% if ParametersMeasure %}
@@ -80,7 +80,7 @@
                             {% for anal in Analysis %}
                             {% if anal.type == "Общий Анализ Крови" %}
                             <p>|</p>
-                            <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time }}</a>
+                            <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time|date:"d.m.Y" }}</a>
                             <div class="popup" id="popup{{ anal.id }}">
                                 <!-- Модалка для вывода параметров анализа -->
                                 {% if ParametersOAK %}
@@ -103,7 +103,7 @@
                             {% for anal in Analysis %}
                             {% if anal.type == "Данные кардиовизора" %}
                             <p>|</p>
-                            <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time }}</a>
+                            <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time|date:"d.m.Y" }}</a>
                             <div class="popup" id="popup{{ anal.id }}">
                                 <!-- Модалка для вывода параметров анализа -->
                                 {% if ParametersCardio %}
