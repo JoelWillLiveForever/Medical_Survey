@@ -266,7 +266,7 @@ class OAKForm(forms.Form):
     eritrocity = forms.FloatField(label='Эритроциты')
 
     def save(self, patient, commit=True):
-        dateAnalysis = datetime.strptime(self.cleaned_data['date'], '%Y-%m-%d').strftime('%d/%m/%y')
+        dateAnalysis = datetime.strptime(str(self.cleaned_data['date']), '%Y-%m-%d').strftime('%d/%m/%y')
         curr_analysis = Analysis(type='Общий Анализ Крови', time=self.cleaned_data['date'], patient=patient)
 
         p_gemoglobin = Parameter(name='Гемоглобин', result=self.cleaned_data['gemoglobin'], analysis=curr_analysis)
@@ -281,7 +281,7 @@ class OAKForm(forms.Form):
             p_eritrocity.save()
 
 class MeasurementForm(forms.Form):
-    date = forms.DateField(input_formats=DATE_INPUT_FORMATS,widget=forms.SelectDateWidget(years=YEARS, months=MONTHS,), label='Дата измерений')
+    date = forms.DateField(input_formats=DATE_INPUT_FORMATS, widget=forms.SelectDateWidget(years=YEARS, months=MONTHS,), label='Дата измерений')
 
     sad = forms.FloatField(label='САД (Систолическое артериальное давление)')
     dad = forms.FloatField(label='ДАД (Диастолическое артериальное давление)')

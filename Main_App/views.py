@@ -206,16 +206,36 @@ def profile(request):
     parametersMeasure=None
     parametersCardio=None
 
-    analysis = Analysis.objects.filter(patient=request.user.id, type='Данные измерений')
-    if analysis:
-        parametersMeasure = Parameter.objects.filter(analysis=analysis[0])
-    analysis = Analysis.objects.filter(patient=request.user.id, type='Общий Анализ Крови')
-    if analysis:
-        parametersOAK = Parameter.objects.filter(analysis=analysis[0])
-    analysis = Analysis.objects.filter(patient=request.user.id, type='Данные кардиовизора')
-    if analysis:
-        parametersCardio = Parameter.objects.filter(analysis=analysis[0])
+    # # все анализы пациента 
+    # analysis = Analysis.objects.filter(patient=request.user.id)
+    # for anal in analysis:
+    #     print(anal)
+
+    # parametersMeasure = Parameter.objects.filter(analysis=Analysis.objects.filter(patient=request.user.id, type='Данные измерений'))
+
     analysis = Analysis.objects.filter(patient=request.user.id)
+
+    if analysis:
+        for anal in analysis:
+            if anal.type == 'Данные измерений':
+                parametersMeasure = Parameter.objects.filter(analysis__in=analysis)
+            if anal.type == 'Общий Анализ Крови':
+                parametersOAK = Parameter.objects.filter(analysis__in=analysis)
+            if anal.type == 'Данные кардиовизора':
+                parametersCardio = Parameter.objects.filter(analysis__in=analysis)
+
+
+    # analysis = Analysis.objects.filter(patient=request.user.id, type='Данные измерений')
+    # if analysis:
+    #     parametersMeasure = Parameter.objects.filter(analysis__in=analysis)
+
+    # analysis = Analysis.objects.filter(patient=request.user.id, type='Общий Анализ Крови')
+    # if analysis:
+    #     parametersOAK = Parameter.objects.filter(analysis__in=analysis)
+        
+    # analysis = Analysis.objects.filter(patient=request.user.id, type='Данные кардиовизора')
+    # if analysis:
+    #     parametersCardio = Parameter.objects.filter(analysis__in=analysis)
 
     # for obj in parametersOAK:
     #     print(obj.name + " " + obj.result)

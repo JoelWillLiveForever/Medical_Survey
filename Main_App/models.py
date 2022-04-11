@@ -66,8 +66,14 @@ class Analysis(models.Model):
     time = models.DateTimeField(default=date.today())
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return '\n\tДата и Время: ' + str(self.time) + '\n\tТип: ' + self.type + '\n\tПациент: ' + str(self.patient)
+
 class Parameter(models.Model):
     name = models.CharField(max_length=150)
     result = models.CharField(max_length=150)
 
     analysis = models.ForeignKey(Analysis, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '\n\tНазвание: ' + self.name + '\n\tРезультат: ' + self.result + '\n\tАнализ: ' + str(self.analysis)
