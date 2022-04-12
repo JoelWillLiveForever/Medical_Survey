@@ -1,0 +1,42 @@
+.formHW {
+    display: flex;
+    justify-content: center;
+    margin-top: 3%;
+    font-size: 24px;
+}
+
+.formHW input{
+    width: 30%;
+    height: 50px;
+    background-color: #c4c4c4;
+    border-radius: 10px;
+    border: none;
+}
+
+.Enter_button{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 30px;
+}
+
+.Enter_button button{
+    width: 350px;
+    height: 70px;
+    font-size: 24px;
+    border-radius: 10px;
+    border: none;
+    background: #C4C4C4;
+}
+
+.Enter_button button:hover{
+    background: #757575;
+}
+
+.Enter_button button:active{
+    background: #333333;
+    color: #C4C4C4;
+}
+
+.submitAnalysis{
+    margin-left: 5%;
+}

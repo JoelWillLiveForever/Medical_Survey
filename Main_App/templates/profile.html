@@ -55,16 +55,17 @@
                             {% csrf_token %}
                             <p>Данные измерений</p>
                             {% if Analysis %}
+                                <p>|</p>
                                 {% for anal in Analysis %}
                                     {% if anal.type == "Данные измерений" %}
+                                        <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time|date:"d.m" }}</a>
                                         <p>|</p>
-                                        <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time|date:"d.m.Y" }}</a>
                                         <div class="popup" id="popup{{ anal.id }}">
                                             <!-- Модалка для вывода параметров анализа -->
                                             {% if ParametersMeasure %}
                                                 {% for parameter in ParametersMeasure %}
                                                     {% if anal == parameter.analysis %}
-                                                        <p>{{ parameter.name }}: {{ parameter.result }}</p>
+                                                        <p>{{ parameter.name }}: {{ parameter.result }} </p>
                                                     {% endif %}
                                                 {% endfor %}
                                             {% endif %}
@@ -80,16 +81,17 @@
                             {% csrf_token %}
                             <p>Общий Анализ Крови</p>
                             {% if Analysis %}
+                            <p>|</p>
                                 {% for anal in Analysis %}
                                     {% if anal.type == "Общий Анализ Крови" %}
+                                        <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time|date:"d.m" }}</a>
                                         <p>|</p>
-                                        <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time|date:"d.m.Y" }}</a>
                                         <div class="popup" id="popup{{ anal.id }}">
                                             <!-- Модалка для вывода параметров анализа -->
                                             {% if ParametersOAK %}
                                                 {% for parameter in ParametersOAK %}
                                                     {% if anal == parameter.analysis %}
-                                                        <p>{{ parameter.name }}: {{ parameter.result }}</p>
+                                                        <p>{{ parameter.name }}: {{ parameter.result }} </p>
                                                     {% endif %}
                                                 {% endfor %}
                                             {% endif %}
@@ -105,16 +107,17 @@
                             {% csrf_token %}
                             <p>Данные кардиовизора</p>
                             {% if Analysis %}
+                            <p>|</p>
                                 {% for anal in Analysis %}
                                     {% if anal.type == "Данные кардиовизора" %}
+                                        <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time|date:"d.m" }}</a>
                                         <p>|</p>
-                                        <a href="#" tag="add_new_values" onclick="showModalWin('{{ anal.id }}')">{{ anal.time|date:"d.m.Y" }}</a>
                                         <div class="popup" id="popup{{ anal.id }}">
                                             <!-- Модалка для вывода параметров анализа -->
                                             {% if ParametersCardio %}
                                                 {% for parameter in ParametersCardio %}
                                                     {% if anal == parameter.analysis %}
-                                                        <p>{{ parameter.name }}: {{ parameter.result }}</p>
+                                                        <p>{{ parameter.name }}: {{ parameter.result }} </p>
                                                     {% endif %}
                                                 {% endfor %}
                                             {% endif %}

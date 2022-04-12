@@ -6,7 +6,7 @@ function showModalWin(analysis_id) {
     document.body.appendChild(darkLayer); // включаем затемнение
 
     var modalWin = document.getElementById('popup' + analysis_id); // находим наше "окно"
-    modalWin.style.display = 'unset'; // "включаем" его
+    modalWin.style.display = 'flex'; // "включаем" его
 
     darkLayer.onclick = function () {  // при клике на слой затемнения все исчезнет
         darkLayer.parentNode.removeChild(darkLayer); // удаляем затемнение

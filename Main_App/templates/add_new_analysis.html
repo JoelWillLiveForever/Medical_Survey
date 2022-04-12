@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+{% load static %}
+
+<link rel="stylesheet" type='text/css' href='{% static "css/add_new_analysis.css" %}'>
 
 <div class="container body-form">
     <div class="formHW">
@@ -19,6 +22,7 @@
             <p>{{ analysisForm.gemoglobin.label }}: {{ analysisForm.gemoglobin }}</p> 
             <p>{{ analysisForm.leycocite.label }}: {{ analysisForm.leycocite }}</p>
             <p>{{ analysisForm.eritrocity.label }}: {{ analysisForm.eritrocity }}</p>
+            <p>{{ analysisForm.soe.label }}: {{ analysisForm.soe }}</p>
             {% elif context_analysis == "Cardio" %}
             <p>{{ analysisForm.mio_index.label }}: {{ analysisForm.mio_index }}</p> 
             <p>{{ analysisForm.g1.label }}: {{ analysisForm.g1 }}</p>
@@ -28,8 +32,12 @@
             <p>{{ analysisForm.date.label }}:
                 <input type="date" name="date" required id="id_date"></input>
             </p>
-            <button type="button" onclick="location.href = '/profile'" class="back" name='back_button'>Назад</button>
-            <button type="submit" class="submitAnalysis" name='submitAnalysis'>Сохранить</button>
+
+            <div class="Enter_button">
+                <button type="button" onclick="location.href = '/profile'" class="back" name='back_button'>Назад</button>
+                <button type="submit" class="submitAnalysis" name='submitAnalysis'>Сохранить</button>
+            </div>
+           
         </form>
     </div>
 </div>

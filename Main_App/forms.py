@@ -264,6 +264,7 @@ class OAKForm(forms.Form):
     gemoglobin = forms.FloatField(label='Гемоглобин')
     leycocite = forms.FloatField(label='Лейкоциты')
     eritrocity = forms.FloatField(label='Эритроциты')
+    soe = forms.FloatField(label='СОЭ')
 
     def save(self, patient, commit=True):
         dateAnalysis = datetime.strptime(str(self.cleaned_data['date']), '%Y-%m-%d').strftime('%d/%m/%y')
@@ -272,6 +273,7 @@ class OAKForm(forms.Form):
         p_gemoglobin = Parameter(name='Гемоглобин', result=self.cleaned_data['gemoglobin'], analysis=curr_analysis)
         p_leycocite = Parameter(name='Лейкоциты', result=self.cleaned_data['leycocite'], analysis=curr_analysis)
         p_eritrocity = Parameter(name='Эритроциты', result=self.cleaned_data['eritrocity'], analysis=curr_analysis)
+        p_soe = Parameter(name='СОЭ', result=self.cleaned_data['soe'], analysis=curr_analysis)
 
         if commit:
             curr_analysis.save()
@@ -279,6 +281,7 @@ class OAKForm(forms.Form):
             p_gemoglobin.save()
             p_leycocite.save()
             p_eritrocity.save()
+            p_soe.save()
 
 class MeasurementForm(forms.Form):
     date = forms.DateField(input_formats=DATE_INPUT_FORMATS, widget=forms.SelectDateWidget(years=YEARS, months=MONTHS,), label='Дата измерений')
