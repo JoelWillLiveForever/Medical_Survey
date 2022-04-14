@@ -72,7 +72,7 @@ class Analysis(models.Model):
 class Parameter(models.Model):
     name = models.CharField(max_length=150)
     result = models.CharField(max_length=150)
-
+    units = models.CharField(max_length=75)
     analysis = models.ForeignKey(Analysis, on_delete=models.CASCADE)
 
     def __str__(self):

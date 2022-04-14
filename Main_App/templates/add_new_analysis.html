@@ -31,6 +31,13 @@
             {% endif %}
             <p>{{ analysisForm.date.label }}:
                 <input type="date" name="date" required id="id_date"></input>
+                {% if analysisForm.errors %}
+                        {% if analysisForm.date.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ analysisForm.error_messages.date_isNotYet|escape }}</strong>
+                            </div>
+                        {% endif %}
+                {% endif %}
             </p>
 
             <div class="Enter_button">

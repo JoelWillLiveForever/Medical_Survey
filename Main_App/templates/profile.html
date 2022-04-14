@@ -65,7 +65,7 @@
                                             {% if ParametersMeasure %}
                                                 {% for parameter in ParametersMeasure %}
                                                     {% if anal == parameter.analysis %}
-                                                        <p>{{ parameter.name }}: {{ parameter.result }} </p>
+                                                        <p>{{ parameter.name }}: {{ parameter.result }} {{ parameter.units }}</p>
                                                     {% endif %}
                                                 {% endfor %}
                                             {% endif %}

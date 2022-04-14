@@ -51,7 +51,7 @@ def registration(request):
         # request.POST = post
         # print(request.POST)
         form = RegistrationForm(request.POST)
-        # print(form)
+        #print()
         if form.is_valid():
             user = form.save()
             current_site = get_current_site(request)
@@ -258,11 +258,12 @@ def add_new_analysis(request):
 
     if context_analysis == 'Measure':
         analysisForm = MeasurementForm(request.POST)
+        print(analysisForm.errors)
     elif context_analysis == 'OAK':
         analysisForm = OAKForm(request.POST)
     elif context_analysis == 'Cardio':
         analysisForm = CardiovisorForm(request.POST)
-    else:
+    elif not context_analysis:
         return redirect('profile')
 
     if request.method == 'POST' and 'submitAnalysis' in request.POST:
@@ -273,8 +274,6 @@ def add_new_analysis(request):
         if analysisForm.is_valid():
             print(f"Дата анализа: {request.POST['date']}")
             analysisForm.save(patient=Patient.objects.get(id=request.user.id))
-        else:
-            print(analysisForm.errors)
         return redirect('profile')
     context = {'analysisForm': analysisForm,
                'context_analysis': context_analysis}
