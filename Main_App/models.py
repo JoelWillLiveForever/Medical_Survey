@@ -7,7 +7,7 @@ from django.contrib.auth.models import PermissionsMixin
 from .managers import *
 
 from django.utils import timezone
-import datetime
+from datetime import date
 
 # Create your models here.
 
@@ -63,11 +63,17 @@ class Patient(AbstractBaseUser, PermissionsMixin):
 
 class Analysis(models.Model):
     type = models.CharField(max_length=150)
-    time = models.DateTimeField()
+    time = models.DateTimeField(default=date.today())
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '\n\tДата и Время: ' + str(self.time) + '\n\tТип: ' + self.type + '\n\tПациент: ' + str(self.patient)
 
 class Parameter(models.Model):
     name = models.CharField(max_length=150)
     result = models.CharField(max_length=150)
-
+    units = models.CharField(max_length=75)
     analysis = models.ForeignKey(Analysis, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '\n\tНазвание: ' + self.name + '\n\tРезультат: ' + self.result + '\n\tАнализ: ' + str(self.analysis)

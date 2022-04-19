@@ -6,7 +6,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
+from matplotlib.style import context
 from numpy import where
+from datetime import datetime
 
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
@@ -49,7 +51,7 @@ def registration(request):
         # request.POST = post
         # print(request.POST)
         form = RegistrationForm(request.POST)
-        # print(form)
+        #print()
         if form.is_valid():
             user = form.save()
             current_site = get_current_site(request)
@@ -147,12 +149,20 @@ def login_page(request):
 
     return render(request, 'login_page.html', context)
 
-def profile(request):
-    ##### ПРИМЕР
-    parameters = Parameter.objects.filter(analysis=(Analysis.objects.get(patient=request.user.id)))
 
-    for obj in parameters:
-        print(obj.name + " " + obj.result)
+def profile(request):
+    #Контекстная переменная, меняет своё значение в зависимости от добавляемого анализа
+    #Влияет на изменение формы для заполнения анализа
+    global context_analysis
+    if request.method == 'POST' and 'add_new_parameters_toMeasure' in request.POST:
+        context_analysis = 'Measure'
+        return redirect('add_new_analysis')
+    if request.method == 'POST' and 'add_new_parameters_toOAK' in request.POST:
+        context_analysis = 'OAK'
+        return redirect('add_new_analysis')
+    if request.method == 'POST' and 'add_new_parameters_toCardio' in request.POST:
+        context_analysis = 'Cardio'
+        return redirect('add_new_analysis')
 
     if request.method == 'POST' and 'button_logout' in request.POST:
         logout(request)
@@ -161,7 +171,7 @@ def profile(request):
         form = HeightNWeightForm(request.POST)
         if form.is_valid(): # Изменение значений роста и веса
             Patient.objects.filter(id=request.user.id).update(height=request.POST.get('height'), weight=request.POST.get('weight'))
-    
+
     # Создание пациентов для вывода их текущих значений
     patient_height = Patient.objects.filter(id=request.user.id).get().height
     patient_weight = Patient.objects.filter(id=request.user.id).get().weight
@@ -189,10 +199,85 @@ def profile(request):
         data = {'height': 0.0, 'weight': 0.0}
         formHW = HeightNWeightForm(data)
 
-    #formHW = HeightNWeightForm()
-    context = {'formHW': formHW, 'Universities': PremakedInfo.UNIVERSITIES}
+    # analysis_arr = Analysis.objects.filter(patient=request.user.id)
+    # print(f'Analysis_ARR: {analysis_arr}')
+    
+    parametersOAK=None
+    parametersMeasure=None
+    parametersCardio=None
+
+    # # все анализы пациента 
+    # analysis = Analysis.objects.filter(patient=request.user.id)
+    # for anal in analysis:
+    #     print(anal)
+
+    # parametersMeasure = Parameter.objects.filter(analysis=Analysis.objects.filter(patient=request.user.id, type='Данные измерений'))
+
+    analysis = Analysis.objects.filter(patient=request.user.id)
+
+    if analysis:
+        for anal in analysis:
+            if anal.type == 'Данные измерений':
+                parametersMeasure = Parameter.objects.filter(analysis__in=analysis)
+            if anal.type == 'Общий Анализ Крови':
+                parametersOAK = Parameter.objects.filter(analysis__in=analysis)
+            if anal.type == 'Данные кардиовизора':
+                parametersCardio = Parameter.objects.filter(analysis__in=analysis)
+
+
+    # analysis = Analysis.objects.filter(patient=request.user.id, type='Данные измерений')
+    # if analysis:
+    #     parametersMeasure = Parameter.objects.filter(analysis__in=analysis)
+
+    # analysis = Analysis.objects.filter(patient=request.user.id, type='Общий Анализ Крови')
+    # if analysis:
+    #     parametersOAK = Parameter.objects.filter(analysis__in=analysis)
+        
+    # analysis = Analysis.objects.filter(patient=request.user.id, type='Данные кардиовизора')
+    # if analysis:
+    #     parametersCardio = Parameter.objects.filter(analysis__in=analysis)
+
+    # for obj in parametersOAK:
+    #     print(obj.name + " " + obj.result)
+    # for obj in parametersMeasure:
+    #     print(obj.name + " " + obj.result)
+    # for obj in analysis:
+    #     print(type(obj.time))
+
+    context = {'formHW': formHW, 
+               'Universities': PremakedInfo.UNIVERSITIES,
+               'ParametersOAK': parametersOAK,
+               'ParametersMeasure': parametersMeasure,
+               'ParametersCardio': parametersCardio,
+               'Analysis': analysis}
 
     return render(request, 'profile.html', context)
+
+def add_new_analysis(request):
+    analysisForm = None
+
+    if context_analysis == 'Measure':
+        analysisForm = MeasurementForm(request.POST)
+        print(analysisForm.errors)
+    elif context_analysis == 'OAK':
+        analysisForm = OAKForm(request.POST)
+    elif context_analysis == 'Cardio':
+        analysisForm = CardiovisorForm(request.POST)
+    elif not context_analysis:
+        return redirect('profile')
+
+    if request.method == 'POST' and 'submitAnalysis' in request.POST:
+        print(f"Дата анализа: {request.POST['date']}")
+        post=request.POST.copy()
+        post.update({'date': post['date'], 'date': datetime.strptime(str(post['date']), '%Y-%m-%d').strftime('%d-%m-%Y')})
+        request.POST = post
+        if analysisForm.is_valid():
+            print(f"Дата анализа: {request.POST['date']}")
+            analysisForm.save(patient=Patient.objects.get(id=request.user.id))
+        return redirect('profile')
+    context = {'analysisForm': analysisForm,
+               'context_analysis': context_analysis}
+    return render(request, 'add_new_analysis.html', context)
 
 def questionA(request):
     context= {

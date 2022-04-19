@@ -1,5 +1,7 @@
 from email.policy import default
 from pyexpat import model
+from unicodedata import name
+from urllib import request
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
@@ -13,10 +15,22 @@ from datetime import datetime
 from .PremakedInfo import PremakedInfo
 from matplotlib import widgets
 
+# from abc import ABC, abstractmethod
+
 # from django.core.validators import validate_email
 # from django.contrib.auth.password_validation import validate_password
 
 from .models import *
+
+MONTHS = {
+    1:('Январь'), 2:('Февраль'), 3:('Март'), 4:('Апрель'),
+    5:('Май'), 6:('Июнь'), 7:('Июль'), 8:('Август'),
+    9:('Сентябрь'), 10:('Октябрь'), 11:('Ноябрь'), 12:('Декабрь')
+    }
+
+YEARS = []
+for i in range(0, 2021-1920): #Заполнение селектора дат годами от 1922 до 2022
+    YEARS.append(str((i-2022)*-1))
 
 class PatientCreationForm(UserCreationForm):
 
@@ -89,14 +103,6 @@ class RegistrationForm(UserCreationForm):
 
     gender = forms.ChoiceField(required=True, label='* Пол', choices=PremakedInfo.GENDERS)
 
-    MONTHS = {
-    1:('Январь'), 2:('Февраль'), 3:('Март'), 4:('Апрель'),
-    5:('Май'), 6:('Июнь'), 7:('Июль'), 8:('Август'),
-    9:('Сентябрь'), 10:('Октябрь'), 11:('Ноябрь'), 12:('Декабрь')
-    }
-    YEARS = []
-    for i in range(0, 2021-1920): #Заполнение селектора дат годами от 1922 до 2022
-        YEARS.append(str((i-2022)*-1))
     birth_date = forms.DateField(widget=forms.SelectDateWidget(years=YEARS, months=MONTHS), label='* Дата рождения')
 
     email = forms.EmailField(required=True, label='* Адрес электронной почты', max_length=320, help_text='Не более 320 символов')
@@ -157,6 +163,7 @@ class RegistrationForm(UserCreationForm):
             )
         return email
     def clean_birth_date(self):
+        print(self.cleaned_data.get('birth_date'))
         if self.cleaned_data.get('birth_date') > datetime.date(datetime.today()):
             raise forms.ValidationError(
                 self.error_messages['birthdate_isNotYet'],
@@ -223,3 +230,138 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+# class AbstractAnalysisForm(ABC):
+
+#     @abstractmethod
+#     def get_form(self):
+#         pass
+
+#     class Meta: 
+#         model = Parameter # ???? анализы или параметры??
+#         fields = (
+#              #????
+#        )
+
+# class OAKForm(AbstractAnalysisForm):
+#     def get_form(self):
+#         pass
+
+DATE_INPUT_FORMATS = ['%Y-%m-%d',
+                    '%m/%d/%Y',
+                    '%m/%d/%y',
+                    '%b %d %Y',
+                    '%b %d, %Y',
+                    '%d %b %Y',
+                    '%d %b, %Y',
+                    '%B %d %Y',
+                    '%B %d, %Y',
+                    '%d %B %Y',
+                    '%d %B, %Y']
+
+class OAKForm(forms.Form):
+    date = forms.DateField(input_formats=DATE_INPUT_FORMATS, widget=forms.SelectDateWidget(years=YEARS, months=MONTHS), label='Дата анализа')
+
+    gemoglobin = forms.FloatField(label='Гемоглобин')
+    leycocite = forms.FloatField(label='Лейкоциты')
+    eritrocity = forms.FloatField(label='Эритроциты')
+    soe = forms.FloatField(label='СОЭ')
+    error_messages = {
+        'date_isNotYet': 'Дата указывает на то, что вы ещё не сделали анализ! Укажите прошедшую дату, если вы не из будущего.',
+        'error': 'Форма не валидна!',
+    }
+    def save(self, patient, commit=True):
+        dateAnalysis = datetime.strptime(str(self.cleaned_data['date']), '%Y-%m-%d').strftime('%d/%m/%y')
+        curr_analysis = Analysis(type='Общий Анализ Крови', time=self.cleaned_data['date'], patient=patient)
+
+        p_gemoglobin = Parameter(name='Гемоглобин', result=self.cleaned_data['gemoglobin'], units='г/л', analysis=curr_analysis)
+        p_leycocite = Parameter(name='Лейкоциты', result=self.cleaned_data['leycocite'], units='*10^9/л', analysis=curr_analysis)
+        p_eritrocity = Parameter(name='Эритроциты', result=self.cleaned_data['eritrocity'], units='*10^12/л', analysis=curr_analysis)
+        p_soe = Parameter(name='СОЭ', result=self.cleaned_data['soe'], units='мм/час', analysis=curr_analysis)
+
+        if commit:
+            curr_analysis.save()
+
+            p_gemoglobin.save()
+            p_leycocite.save()
+            p_eritrocity.save()
+            p_soe.save()
+    def clean_date(self):
+        print(self.cleaned_data.get('date'))
+        if self.cleaned_data.get('date') > datetime.date(datetime.today()):
+            raise forms.ValidationError(
+                self.error_messages['date_isNotYet'],
+                code='date_isNotYet',
+            )
+        return self.data['date']
+
+class MeasurementForm(forms.Form):
+    date = forms.DateField(input_formats=DATE_INPUT_FORMATS, widget=forms.SelectDateWidget(years=YEARS, months=MONTHS,), label='Дата измерений')
+
+    sad = forms.FloatField(label='САД (Систолическое артериальное давление)')
+    dad = forms.FloatField(label='ДАД (Диастолическое артериальное давление)')
+    chss = forms.FloatField(label='ЧСС (Число сердечных сокращений)')
+    chdd = forms.FloatField(label='ЧДД (Число дыхательных движений)')
+    error_messages = {
+        'date_isNotYet': 'Дата указывает на то, что вы ещё не сделали анализ! Укажите прошедшую дату, если вы не из будущего.',
+        'error': 'Форма не валидна!',
+    }
+    def save(self, patient, commit=True):
+        dateAnalysis = datetime.strptime(str(self.cleaned_data['date']), '%Y-%m-%d').strftime('%d/%m/%y')
+        curr_analysis = Analysis(type='Данные измерений', time=self.cleaned_data['date'], patient=patient)
+        #print(f"Date anala: {dateAnalysis}")
+        p_sad = Parameter(name='САД', result=self.cleaned_data['sad'], units='мм. рт. ст.', analysis=curr_analysis)
+        p_dad  = Parameter(name='ДАД', result=self.cleaned_data['dad'], units='мм. рт. ст.', analysis=curr_analysis)
+        p_chss = Parameter(name='ЧСС', result=self.cleaned_data['chss'], units='уд/мин', analysis=curr_analysis)
+        p_chdd = Parameter(name='ЧДД', result=self.cleaned_data['chdd'], units='уд/мин', analysis=curr_analysis)
+
+        if commit:
+            curr_analysis.save()
+
+            p_sad.save()
+            p_dad.save()
+            p_chss.save()
+            p_chdd.save()
+    def clean_date(self):
+        print(self.cleaned_data.get('date'))
+        if self.cleaned_data.get('date') > datetime.date(datetime.today()):
+            raise forms.ValidationError(
+                self.error_messages['date_isNotYet'],
+                code='date_isNotYet',
+            )
+        return self.data['date']
+
+class CardiovisorForm(forms.Form):
+    date = forms.DateField(input_formats=DATE_INPUT_FORMATS, widget=forms.SelectDateWidget(years=YEARS, months=MONTHS), label='Дата измерений')
+
+    mio_index = forms.FloatField(label='Индекс миокарда')
+    g1 = forms.FloatField(label='G1')
+    g2 = forms.FloatField(label='G2')
+    g3 = forms.FloatField(label='G3')
+    error_messages = {
+        'date_isNotYet': 'Дата указывает на то, что вы ещё не сделали анализ! Укажите прошедшую дату, если вы не из будущего.',
+        'error': 'Форма не валидна!',
+    }
+    def save(self, patient, commit=True):
+        curr_analysis = Analysis(type='Данные кардиовизора', time=self.cleaned_data['date'], patient=patient)
+
+        p_mio_index = Parameter(name='Индекс миокарда', result=self.cleaned_data['mio_index'], units='%', analysis=curr_analysis)
+        p_g1 = Parameter(name='G1', result=self.cleaned_data['g1'], units='%', analysis=curr_analysis)
+        p_g2 = Parameter(name='G2', result=self.cleaned_data['g2'], units='%', analysis=curr_analysis)
+        p_g3 = Parameter(name='G3', result=self.cleaned_data['g3'], units='%', analysis=curr_analysis)
+
+        if commit:
+            curr_analysis.save()
+
+            p_mio_index.save()
+            p_g1.save()
+            p_g2.save()
+            p_g3.save()
+    def clean_date(self):
+        print(self.cleaned_data.get('date'))
+        if self.cleaned_data.get('date') > datetime.date(datetime.today()):
+            raise forms.ValidationError(
+                self.error_messages['date_isNotYet'],
+                code='date_isNotYet',
+            )
+        return self.data['date']

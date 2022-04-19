@@ -9,6 +9,7 @@ body {
 .tabs {
     display: flex;
     justify-content: center;
+    font-size: 24px;
 }
 
 .nav {
@@ -81,10 +82,12 @@ body {
 }
 
 .analys1 p{
+    display: inline;
     margin-left: 2%;
 }
 
 .analysis_info{
+    padding: 5px 0px 5px 0px;
     background-color: #c4c4c4;
     margin-bottom: 35px;
     border-radius: 10px;
@@ -111,4 +114,67 @@ body {
 .submitHW {
     border-radius: 0.5;
     
+}
+
+.popup{
+    flex-direction: column;
+    align-items: center;
+    font-size: 24px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    border: solid;
+    width: 45%;
+    margin: 0 auto;
+    padding: 3% 10% 3% 10%;
+    z-index:2; /* поверх всех */
+    display: none;  /* сначала невидим */
+    animation: fadeEffect 1s;
+    overflow-y: scroll; /* Скроллинг */
+    background-color: #FFFFFF;     
+    max-height: 90%;   
+}
+
+#shadow { 
+    position: fixed;
+    width:100%;
+    height:100%;
+    z-index:1; /* поверх всех  кроме окна*/
+    background:#000;
+    opacity: 0.5; /*прозрачность*/
+    left:0;
+    top:0;
+    animation: fadeEffectShadow 0.75s;
+}
+@keyframes fadeEffectShadow {
+    from {opacity: 0;}
+    to {opacity: 0.5;}
+}
+
+.analysis_info button { 
+    display: inline-flex;
+    justify-content: center;
+    align-items: center; 
+    width: 100px;
+    height: 50px; 
+    background: #ABABAB;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+
+.analysis_info button:hover{
+    background: #757575;
+}
+
+.analysis_info button:active{
+    background: #333333;
+    color: #C4C4C4;
+}
+
+
+a{
+    color: black;
 }

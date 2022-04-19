@@ -1,0 +1,52 @@
+{% extends 'profileBase.html' %}
+
+{% block title %}
+Личный кабинет
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" type='text/css' href='{% static "css/add_new_analysis.css" %}'>
+
+<div class="container body-form">
+    <div class="formHW">
+        <form method="post">
+            {% csrf_token %}
+            {% if context_analysis == "Measure" %}
+            <p>{{ analysisForm.sad.label }}: {{ analysisForm.sad }}</p> 
+            <p>{{ analysisForm.dad.label }}: {{ analysisForm.dad }}</p>
+            <p>{{ analysisForm.chss.label }}: {{ analysisForm.chss }}</p>
+            <p>{{ analysisForm.chdd.label }}: {{ analysisForm.chdd }}</p>
+            {% elif context_analysis == "OAK" %}
+            <p>{{ analysisForm.gemoglobin.label }}: {{ analysisForm.gemoglobin }}</p> 
+            <p>{{ analysisForm.leycocite.label }}: {{ analysisForm.leycocite }}</p>
+            <p>{{ analysisForm.eritrocity.label }}: {{ analysisForm.eritrocity }}</p>
+            <p>{{ analysisForm.soe.label }}: {{ analysisForm.soe }}</p>
+            {% elif context_analysis == "Cardio" %}
+            <p>{{ analysisForm.mio_index.label }}: {{ analysisForm.mio_index }}</p> 
+            <p>{{ analysisForm.g1.label }}: {{ analysisForm.g1 }}</p>
+            <p>{{ analysisForm.g2.label }}: {{ analysisForm.g2 }}</p>
+            <p>{{ analysisForm.g3.label }}: {{ analysisForm.g3 }}</p>
+            {% endif %}
+            <p>{{ analysisForm.date.label }}:
+                <input type="date" name="date" required id="id_date"></input>
+                <!-- Ошибка постоянно выводится  -->
+                <!-- {% if analysisForm.errors %}
+                        {% if analysisForm.date.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ analysisForm.error_messages.date_isNotYet|escape }}</strong>
+                            </div>
+                        {% endif %}
+                {% endif %} -->
+            </p>
+
+            <div class="Enter_button">
+                <button type="button" onclick="location.href = '/profile'" class="back" name='back_button'>Назад</button>
+                <button type="submit" class="submitAnalysis" name='submitAnalysis'>Сохранить</button>
+            </div>
+           
+        </form>
+    </div>
+</div>
+{% endblock %}
