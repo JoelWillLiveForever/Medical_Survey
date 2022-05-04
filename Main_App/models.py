@@ -1,8 +1,10 @@
-from enum import Enum
+from enum import Enum, unique
 from tkinter import CASCADE
+from xmlrpc.client import MAXINT
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.forms import CharField, ChoiceField
 
 from .managers import *
 
@@ -77,3 +79,26 @@ class Parameter(models.Model):
 
     def __str__(self):
         return '\n\tНазвание: ' + self.name + '\n\tРезультат: ' + self.result + '\n\tАнализ: ' + str(self.analysis)
+
+class Block(models.Model):
+    name = models.CharField(max_length=150, unique=True)
+
+class Question(models.Model):
+    TYPE_EASY = 'TE'
+    TYPE_UNLOCK_CURRENT_BLOCK = 'TUCB'
+    TYPE_UNLOCK_OTHER_BLOCK = 'TUOB'
+
+    question = models.CharField(max_length=MAXINT, unique=True)
+    block = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='block')
+    
+    CHOICES = [(TYPE_EASY, 'Easy'), (TYPE_UNLOCK_CURRENT_BLOCK, 'Unlock current block'), (TYPE_UNLOCK_OTHER_BLOCK, 'Unlock other block')]
+    type = models.CharField(max_length=4, choices=CHOICES, default=TYPE_EASY)
+
+    unlocked_block_code = models.ForeignKey(Block, blank=True, null=True, on_delete=models.CASCADE, related_name='unlocked_block', default=None)    
+
+class Answer(models.Model):
+    answer = models.BooleanField()
+
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+

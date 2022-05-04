@@ -47,8 +47,21 @@ class Analysis_Admin(admin.ModelAdmin):
 class Parameter_Admin(admin.ModelAdmin):
     model = Parameter
 
+class Block_Admin(admin.ModelAdmin):
+    model = Block
+
+class Question_Admin(admin.ModelAdmin):
+    model = Question
+
+class Answer_Admin(admin.ModelAdmin):
+    model = Answer
+
 admin.site.unregister(mod.Group)
 
 admin.site.register(Patient, Patient_Admin)
 admin.site.register(Analysis, Analysis_Admin)
 admin.site.register(Parameter, Parameter_Admin)
+
+admin.site.register(Block, Block_Admin)
+admin.site.register(Question, Question_Admin)
+admin.site.register(Answer, Answer_Admin)
