@@ -135,7 +135,14 @@
 
     <!-- vvv Вкладка опроса vvv -->
     <div id="Survey" class="tabcontent" style="display: none;">
-        Опрос
+        <form method="post">
+            {% csrf_token %}
+            {% for block in Survey_Blocks %}
+            <button type="submit" class="survey_block" name="block{{ block.id }}" >
+                <p> Блок: {{ block.name }} </p>
+            </button>
+            {% endfor %}
+        </form>
     </div>
 
     <!-- vvv Вкладка рекомендаций vvv -->

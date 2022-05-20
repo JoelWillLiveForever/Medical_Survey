@@ -10,5 +10,5 @@ urlpatterns = [
     path('login_page', views.login_page, name='login_page'),
     path('profile', views.profile, name='profile'),
     path('add_new_analysis', views.add_new_analysis, name='add_new_analysis'),
-    path('questionA', views.questionA, name='questionA'),
+    path('question', views.question, name='question'),
 ]

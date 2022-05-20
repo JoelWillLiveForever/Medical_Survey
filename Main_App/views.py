@@ -1,4 +1,4 @@
-from re import I
+import re
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
@@ -7,7 +7,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from matplotlib.style import context
-from numpy import where
+from numpy import block, where
 from datetime import datetime
 
 from .tokens import account_activation_token
@@ -154,6 +154,19 @@ def profile(request):
     #Контекстная переменная, меняет своё значение в зависимости от добавляемого анализа
     #Влияет на изменение формы для заполнения анализа
     global context_analysis
+    #Контекстная переменная, меняет своё значение в зависимости от выбранного блока опроса
+    global context_block
+    # Вычисление выбранного блока вопросов считыванием с формы через регулярное выражение.
+    # Передаём ID выбранного блока на страницу question с помощью обновления глобальной переменной.
+    if request.method == 'POST' and re.findall(r'block[0-9]', f'{str(request.POST)}'):
+        blockID = re.search(r'block[0-9]', f'{str(request.POST)}').group(0)
+        print(re.search(r'[0-9]', blockID).group(0))
+        blockID = re.search(r'[0-9]', blockID).group(0)
+        print(Question.objects.filter(block__in=re.search(r'[0-9]', blockID).group(0)))
+        if Block.objects.filter(id=blockID).exists():
+            context_block = blockID
+            return redirect('question')
+
     if request.method == 'POST' and 'add_new_parameters_toMeasure' in request.POST:
         context_analysis = 'Measure'
         return redirect('add_new_analysis')
@@ -163,7 +176,7 @@ def profile(request):
     if request.method == 'POST' and 'add_new_parameters_toCardio' in request.POST:
         context_analysis = 'Cardio'
         return redirect('add_new_analysis')
-
+    
     if request.method == 'POST' and 'button_logout' in request.POST:
         logout(request)
         return redirect('login_page')
@@ -175,6 +188,9 @@ def profile(request):
     # Создание пациентов для вывода их текущих значений
     patient_height = Patient.objects.filter(id=request.user.id).get().height
     patient_weight = Patient.objects.filter(id=request.user.id).get().weight
+
+    #Переменные опроса
+    survey_blocks = Block.objects.filter()
 
     # Проверка значений пациентов
     if (patient_height != 0.0 ):
@@ -198,20 +214,10 @@ def profile(request):
     else:
         data = {'height': 0.0, 'weight': 0.0}
         formHW = HeightNWeightForm(data)
-
-    # analysis_arr = Analysis.objects.filter(patient=request.user.id)
-    # print(f'Analysis_ARR: {analysis_arr}')
     
     parametersOAK=None
     parametersMeasure=None
     parametersCardio=None
-
-    # # все анализы пациента 
-    # analysis = Analysis.objects.filter(patient=request.user.id)
-    # for anal in analysis:
-    #     print(anal)
-
-    # parametersMeasure = Parameter.objects.filter(analysis=Analysis.objects.filter(patient=request.user.id, type='Данные измерений'))
 
     analysis = Analysis.objects.filter(patient=request.user.id)
 
@@ -224,31 +230,12 @@ def profile(request):
             if anal.type == 'Данные кардиовизора':
                 parametersCardio = Parameter.objects.filter(analysis__in=analysis)
 
-
-    # analysis = Analysis.objects.filter(patient=request.user.id, type='Данные измерений')
-    # if analysis:
-    #     parametersMeasure = Parameter.objects.filter(analysis__in=analysis)
-
-    # analysis = Analysis.objects.filter(patient=request.user.id, type='Общий Анализ Крови')
-    # if analysis:
-    #     parametersOAK = Parameter.objects.filter(analysis__in=analysis)
-        
-    # analysis = Analysis.objects.filter(patient=request.user.id, type='Данные кардиовизора')
-    # if analysis:
-    #     parametersCardio = Parameter.objects.filter(analysis__in=analysis)
-
-    # for obj in parametersOAK:
-    #     print(obj.name + " " + obj.result)
-    # for obj in parametersMeasure:
-    #     print(obj.name + " " + obj.result)
-    # for obj in analysis:
-    #     print(type(obj.time))
-
     context = {'formHW': formHW, 
                'Universities': PremakedInfo.UNIVERSITIES,
                'ParametersOAK': parametersOAK,
                'ParametersMeasure': parametersMeasure,
                'ParametersCardio': parametersCardio,
+               'Survey_Blocks': survey_blocks,
                'Analysis': analysis}
 
     return render(request, 'profile.html', context)
@@ -279,8 +266,14 @@ def add_new_analysis(request):
                'context_analysis': context_analysis}
     return render(request, 'add_new_analysis.html', context)
 
-def questionA(request):
+def question(request):
+
+    # Выбираем вопросы, принадлежащие блоку через глобальную переменную его ID
+    questions = Question.objects.filter(block__in=context_block)
+    print(questions)
+
     context= {
-        
+        'Questions': questions,
+        'BlockNumber': context_block
     }
-    return render(request, 'questionA.html', context)
+    return render(request, 'question.html', context)

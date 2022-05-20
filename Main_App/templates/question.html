@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Блок {{ BlockNumber }}
+{% endblock %}
+
+{% block content %}
+    {% for question in Questions %}
+        <p>{{ question.question }}</p>
+    {% endfor %}
+{% endblock %}
